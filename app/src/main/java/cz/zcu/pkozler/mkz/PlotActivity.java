@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.GridLayout;
 
 public class PlotActivity extends BaseActivity {
 
@@ -23,6 +25,10 @@ public class PlotActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeEvaluator();
+    }
+
+    public void drawPlot(View v) {
+
     }
 
 }

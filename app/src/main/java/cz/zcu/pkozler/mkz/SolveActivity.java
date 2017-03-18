@@ -25,4 +25,8 @@ public class SolveActivity extends BaseActivity {
         initializeEvaluator();
     }
 
+    public void findSolution(View v) {
+
+    }
+
 }

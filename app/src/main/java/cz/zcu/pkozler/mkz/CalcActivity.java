@@ -8,11 +8,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import cz.zcu.pkozler.mkz.core.ExpressionException;
-import cz.zcu.pkozler.mkz.core.Expression;
-import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
 
 public class CalcActivity extends BaseActivity {
 
