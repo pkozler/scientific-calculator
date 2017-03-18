@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MKZ</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_calc">CalcActivity</string>
+    <string name="title_activity_plot">PlotActivity</string>
+    <string name="title_activity_solve">SolveActivity</string>
+    <string name="calc_activity_button">Výpočet výrazu</string>
+    <string name="plot_activity_button">Zobrazení funkcí</string>
+    <string name="solve_activity_button">Řešení rovnic</string>
+    <string name="calc_input_text">Zadejte výraz</string>
+    <string name="plot_input_text">Zadejte f(x)</string>
+</resources>
