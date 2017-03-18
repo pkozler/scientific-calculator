@@ -1,12 +1,32 @@
 <resources>
-    <string name="app_name">MKZ</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_calc">CalcActivity</string>
-    <string name="title_activity_plot">PlotActivity</string>
-    <string name="title_activity_solve">SolveActivity</string>
-    <string name="calc_activity_button">Výpočet výrazu</string>
-    <string name="plot_activity_button">Zobrazení funkcí</string>
-    <string name="solve_activity_button">Řešení rovnic</string>
+    <string name="app_name">Vědecká kalkulačka</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="title_activity_calc">Výpočet výrazu</string>
+    <string name="title_activity_plot">Zobrazení funkcí</string>
+    <string name="title_activity_solve">Řešení rovnic</string>
     <string name="calc_input_text">Zadejte výraz</string>
+    <string name="plot_text_view"> y = </string>
     <string name="plot_input_text">Zadejte f(x)</string>
+    <string name="plot_button">Zobrazit</string>
+    <string name="solve_left_input_text">Zadejte L(x)</string>
+    <string name="solve_text_view"> = </string>
+    <string name="solve_right_input_text">Zadejte R(x)</string>
+    <string name="solve_lower_boundary_text_view">Interval od </string>
+    <string name="solve_lower_boundary_text">a</string>
+    <string name="solve_upper_boundary_text_view"> do </string>
+    <string name="solve_upper_boundary_text">b</string>
+    <string name="solve_step_count_text_view"> po </string>
+    <string name="solve_step_count_text">n</string>
+    <string name="solve_step_count_text_view_end"> krocích</string>
+    <string name="solve_button">Řešit</string>
+    <string name="error_invalid_symbols">Zadaný výraz obsahuje neplatné symboly.</string>
+    <string name="error_misplaced_arg_separator">Oddělovač argumentů funkce je na nesprávném místě nebo chybí otevírací závorka.</string>
+    <string name="error_missing_left_parentheses">Ve výrazu se nacházejí neotevřené závorky.</string>
+    <string name="error_missing_right_parentheses">Ve výrazu se nacházejí neuzavřené závorky.</string>
+    <string name="error_illegal_var_symbol">Neplatný symbol proměnné ve výpočtu.</string>
+    <string name="error_missing_operands">Nebyl zadán dostatečný počet operandů.</string>
+    <string name="error_missing_args">Nebyl zadán dostatečný počet argumentů funkce.</string>
+    <string name="error_too_many_values">Byl zadán přebytečný počet hodnot.</string>
+    <string name="error_not_int_factorial_arg">Parametry funkce faktoriál musí být celá čísla.</string>
+
 </resources>

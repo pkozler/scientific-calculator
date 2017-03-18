@@ -2,6 +2,9 @@ package cz.zcu.pkozler.mkz.core.helpers;
 
 import java.math.BigDecimal;
 
+import cz.zcu.pkozler.mkz.core.ExpressionException;
+import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
+
 /**
  * Knihovní třída rozšiřující vestavěnou matematickou knihovnu. Poskytuje
  * dodatečné funkce pro výpočty.
@@ -20,7 +23,7 @@ public final class AuxiliaryMath {
     /// </summary>
     /// <param name="a">argument</param>
     /// <returns>faktoriál</returns>
-    public static double factorial(double a) {
+    public static double factorial(double a) throws ExpressionException {
         return AuxiliaryMath.factorial(a, 1);
     }
 
@@ -30,13 +33,13 @@ public final class AuxiliaryMath {
     /// <param name="a">argument</param>
     /// <param name="b">"stupeň" faktoriálu</param>
     /// <returns>k-tý faktoriál</returns>
-    public static double factorial(double a, double b) {
+    public static double factorial(double a, double b) throws ExpressionException {
         if (a > MAX_FACT_ARG) {
             a = MAX_FACT_ARG;
         }
 
         if (a != AuxiliaryMath.integer(a) || b != AuxiliaryMath.integer(b)) {
-            throw new IllegalArgumentException("Parametry funkce faktoriál musí být celá čísla.");
+            throw new ExpressionException(ExpressionExceptionCode.NOT_INT_FACTORIAL_ARG);
         }
 
         double result = 1;

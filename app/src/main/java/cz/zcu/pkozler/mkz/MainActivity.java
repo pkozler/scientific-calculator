@@ -10,7 +10,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    public MainActivity() {
+        super(false);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,43 +22,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void calcActivity(View v) {
-        Intent i = new Intent(this, CalcActivity.class);
-        startActivity(i);
-    }
-
-    public void plotActivity(View v) {
-        Intent i = new Intent(this, PlotActivity.class);
-        startActivity(i);
-    }
-
-    public void solveActivity(View v) {
-        Intent i = new Intent(this, SolveActivity.class);
-        startActivity(i);
     }
 
 }

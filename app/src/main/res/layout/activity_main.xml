@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="calcActivity"
-                android:text="@string/calc_activity_button"
+                android:text="@string/title_activity_calc"
                 tools:layout_editor_absoluteX="258dp"
                 tools:layout_editor_absoluteY="16dp" />
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="plotActivity"
-                android:text="@string/plot_activity_button"
+                android:text="@string/title_activity_plot"
                 tools:layout_editor_absoluteX="269dp"
                 tools:layout_editor_absoluteY="91dp" />
 
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="solveActivity"
-                android:text="@string/solve_activity_button"
+                android:text="@string/title_activity_solve"
                 tools:layout_editor_absoluteX="232dp"
                 tools:layout_editor_absoluteY="168dp" />
         </LinearLayout>

@@ -53,7 +53,7 @@ public class Expression
     /// <param name="str">matematický výraz v in-fixovém zápisu</param>
     /// <param name="var">hodnoty proměnné v matematickém výrazu</param>
     /// <returns>výsledek vyhodnocení</returns>
-    public double eval(String str, Double var) throws AExpressionException
+    public double eval(String str, Double var) throws ExpressionException
     {
         // předzpracování výrazu
         String exp = preprocess(str);
@@ -65,7 +65,7 @@ public class Expression
             this.lastInfix = null;
             this.lastPostfix = null;
             
-            throw new EmptyExpressionException("");
+            throw new ExpressionException(null);
         }
 
         // nový zadaný výraz je odlišný od předchozího
@@ -105,7 +105,7 @@ public class Expression
     /// </summary>
     /// <param name="str">řetězec předzpracovaného výrazu</param>
     /// <returns>seznam tokenů výrazu v in-fixové notaci</returns>
-    private Queue<Token> tokenize(String str) throws InvalidExpressionFormatException
+    private Queue<Token> tokenize(String str) throws ExpressionException
     {
         Queue<Token> infix = new LinkedList<>();
         Matcher matcher;
@@ -147,7 +147,7 @@ public class Expression
             // nenalezen platný token
             else
             {
-                throw new InvalidExpressionFormatException("Zadaný výraz obsahuje neplatné symboly.");
+                throw new ExpressionException(ExpressionExceptionCode.INVALID_SYMBOLS);
             }
 
             // posun indexu podle délky nalezeného tokenu
@@ -162,18 +162,8 @@ public class Expression
     /// </summary>
     /// <param name="lastInfix">seznam tokenů výrazu v in-fixové notaci</param>
     /// <returns>seznam tokenů výrazu v post-fixové notaci</returns>
-    private Queue<Token> parse(Queue<Token> infix) throws InvalidExpressionFormatException
+    private Queue<Token> parse(Queue<Token> infix) throws ExpressionException
     {
-        int n = 0;
-
-        for (Token t : infix)
-        {
-            if (!(t.isLeftParenthesis() || t.isRightParenthesis()))
-            {
-                n++;
-            }
-        }
-
         Queue<Token> postfix = new LinkedList<>();
         Stack<Token> stack = new Stack<>();
 
@@ -202,7 +192,7 @@ public class Expression
                 // Jestliže se zásobník vyprázdní a závorka nebude nalezena, oddělovač byl buď na nesprávném místě, nebo ve vstupu chybí otevírací závorka.
                 if (stack.isEmpty())
                 {
-                    throw new InvalidExpressionFormatException("Oddělovač argumentů funkce je na nesprávném místě nebo chybí otevírací závorka.");
+                    throw new ExpressionException(ExpressionExceptionCode.MISPLACED_ARG_SEPARATOR);
                 }
 
             }
@@ -240,7 +230,7 @@ public class Expression
                 // Pokud je zásobník prázdný a nepodařilo se najít levou závorku, jedná se o neuzavřený výraz a je vhodné oznámit chybu.
                 if (stack.isEmpty())
                 {
-                    throw new InvalidExpressionFormatException("Ve výrazu se nacházejí neotevřené závorky.");
+                    throw new ExpressionException(ExpressionExceptionCode.MISSING_LEFT_PARENTHESES);
                 }
 
                 // Vyjmi ze zásobníku levou závorku, ale nevkládej jí do výstupní fronty.
@@ -265,7 +255,7 @@ public class Expression
             // Jestliže operátor na vrcholu zásobníku je závorka, ve výrazu jsou neuzavřené závorky a je vhodné ohlásit chybu.
             else
             {
-                throw new InvalidExpressionFormatException("Ve výrazu se nacházejí neuzavřené závorky.");
+                throw new ExpressionException(ExpressionExceptionCode.MISSING_RIGHT_PARENTHESES);
             }
         }
 
@@ -278,7 +268,7 @@ public class Expression
     /// <param name="lastPostfix">seznam tokenů výrazu v in-fixové notaci</param>
     /// <param name="x">hodnota proměnné</param>
     /// <returns>vypočtená hodnota</returns>
-    private double calculate(Queue<Token> postfix, Double x) throws InvalidExpressionFormatException, MissingValueException
+    private double calculate(Queue<Token> postfix, Double x) throws ExpressionException
     {
         Stack<Token> stack = new Stack<>();
 
@@ -293,7 +283,7 @@ public class Expression
             else if (t instanceof Variable)
             {
                 if (x == null) {
-                    throw new MissingValueException("Nebyla dosazena hodnota x.");
+                    throw new ExpressionException(ExpressionExceptionCode.ILLEGAL_VAR_SYMBOL);
                 }
                 
                 stack.push(Number.createNumber(x));
@@ -303,7 +293,7 @@ public class Expression
             {
                 if (stack.size() < 2)
                 {
-                    throw new InvalidExpressionFormatException("Nebyl zadán dostatečný počet operandů.");
+                    throw new ExpressionException(ExpressionExceptionCode.MISSING_OPERANDS);
                 }
 
                 Number b = (Number)stack.pop();
@@ -315,7 +305,7 @@ public class Expression
                 // je známo, že funkce přebírá n parametrů, jestliže je na zásobníku méně než n hodnot: Chyba - uživatel nezadal dostatečný počet parametrů
                 if (stack.size() < ((Function)t).MIN_ARGC)
                 {
-                    throw new InvalidExpressionFormatException("Nebyl zadán dostatečný počet parametrů.");
+                    throw new ExpressionException(ExpressionExceptionCode.MISSING_ARGS);
                 }
 
                 Stack<Number> temp = new Stack<>();
@@ -335,7 +325,7 @@ public class Expression
         // jestliže je na zásobníku více hodnot: Chyba - uživatel zadal příliš hodnot
         if (stack.size() != 1)
         {
-            throw new InvalidExpressionFormatException("Byl zadán přebytečný počet hodnot.");
+            throw new ExpressionException(ExpressionExceptionCode.TOO_MANY_VALUES);
         }
 
         // jestliže je na zásobníku jen jedna hodnota je to výsledek výpočtu
@@ -413,4 +403,5 @@ public class Expression
         
         return true;
     }
+
 }

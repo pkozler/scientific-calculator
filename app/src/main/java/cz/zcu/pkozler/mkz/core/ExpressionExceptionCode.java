@@ -1,0 +1,12 @@
+package cz.zcu.pkozler.mkz.core;
+
+/**
+ * Created by Petr Kozler on 18.03.2017.
+ */
+
+public enum ExpressionExceptionCode {
+
+    INVALID_SYMBOLS, MISPLACED_ARG_SEPARATOR, MISSING_LEFT_PARENTHESES, MISSING_RIGHT_PARENTHESES,
+    ILLEGAL_VAR_SYMBOL, MISSING_OPERANDS, MISSING_ARGS, TOO_MANY_VALUES, NOT_INT_FACTORIAL_ARG
+
+}

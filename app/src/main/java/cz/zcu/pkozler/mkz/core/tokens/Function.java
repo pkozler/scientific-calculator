@@ -1,5 +1,6 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
+import cz.zcu.pkozler.mkz.core.ExpressionException;
 import cz.zcu.pkozler.mkz.core.helpers.AuxiliaryMath;
 
 /**
@@ -125,7 +126,7 @@ public class Function extends Token {
     /// </summary>
     /// <param name="args">seznam argumentů funkce</param>
     /// <returns>výsledek výpočtu</returns>
-    public Number calc(Number... args) {
+    public Number calc(Number... args) throws ExpressionException {
         if (FunctionType.YROOT.KEYWORD.equals(str)) {
             return Number.createNumber(AuxiliaryMath.yroot(args[1].VALUE, args[0].VALUE));
         } else if (FunctionType.ACOSG.KEYWORD.equals(str)) {
