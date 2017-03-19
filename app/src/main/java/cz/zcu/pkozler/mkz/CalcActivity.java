@@ -1,23 +1,26 @@
 package cz.zcu.pkozler.mkz;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import cz.zcu.pkozler.mkz.core.ExpressionException;
+import cz.zcu.pkozler.mkz.handlers.ActiveTextFieldChanger;
+import cz.zcu.pkozler.mkz.handlers.CalculatorChanger;
 
 public class CalcActivity extends BaseActivity {
+
+    private EditText inputText;
+    private TextView outputTextView;
 
     public CalcActivity() {
         super(true);
     }
-
-    private EditText inputText;
-    private TextView outputTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +32,29 @@ public class CalcActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeEvaluator();
+
         inputText = (EditText)findViewById(R.id.calcInputText);
         outputTextView = (TextView)findViewById(R.id.calcOutputTextView);
-        inputText.addTextChangedListener(createTextWatcher());
+
+        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
+        createOnFocusChangeListener(calculatorChanger.getActiveTextFieldChanger(), inputText);
+        createTextWatcher(inputText);
     }
 
-    private TextWatcher createTextWatcher() {
-        return new TextWatcher() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        GridLayout gridLayout = (GridLayout)findViewById(R.id.calcGridLayout);
+        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
+        calculatorChanger.setVariableMode(false);
+        ActiveTextFieldChanger activeTextFieldChanger = calculatorChanger.getActiveTextFieldChanger();
+        activeTextFieldChanger.setActiveTextField(inputText);
+        calculatorChanger.getButtonGridLayoutChanger().setGridLayout(this, gridLayout);
+    }
+
+    private void createTextWatcher(final EditText inputText) {
+        inputText.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -60,7 +79,7 @@ public class CalcActivity extends BaseActivity {
                     outputTextView.setText(errorMessages.get(ex.CODE));
                 }
             }
-        };
+        });
     }
 
 }

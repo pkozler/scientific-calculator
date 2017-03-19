@@ -3,16 +3,13 @@ package cz.zcu.pkozler.mkz.handlers;
 import android.widget.Button;
 import android.widget.GridLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cz.zcu.pkozler.mkz.BaseActivity;
 
 /**
  *
  * @author Petr Kozler
  */
-public class ButtonPanelChanger {
+public class ButtonGridLayoutChanger {
 
     private InputButtonType[][] currentButtons;
     private GridLayout gridLayout;

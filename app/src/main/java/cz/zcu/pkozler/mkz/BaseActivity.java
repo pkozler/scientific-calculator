@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.HashMap;
 
 import cz.zcu.pkozler.mkz.core.Expression;
 import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
+import cz.zcu.pkozler.mkz.handlers.ActiveTextFieldChanger;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -88,8 +91,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    protected void createOnFocusChangeListener(final ActiveTextFieldChanger activeTextFieldChanger, final EditText... editTexts) {
+        for (EditText editText : editTexts) {
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        activeTextFieldChanger.setActiveTextField((EditText) v);
+                    }
+                }
+            });
+        }
+    }
+
     private HashMap<ExpressionExceptionCode, String> createErrorMessages() {
-        HashMap<ExpressionExceptionCode, String> messages = new HashMap<ExpressionExceptionCode, String>();
+        HashMap<ExpressionExceptionCode, String> messages = new HashMap<>();
 
         messages.put(null, "");
         messages.put(ExpressionExceptionCode.INVALID_SYMBOLS, getString(R.string.error_invalid_symbols));
@@ -103,6 +119,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         messages.put(ExpressionExceptionCode.NOT_INT_FACTORIAL_ARG, getString(R.string.error_not_int_factorial_arg));
 
         return messages;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

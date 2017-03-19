@@ -1,38 +1,42 @@
 package cz.zcu.pkozler.mkz.handlers;
-/*
-import core.AExpressionException;
-import core.Expression;
-import core.tokens.OperatorType;
-import core.tokens.OtherTokenType;
+
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.FXCollections;
-import javafx.scene.control.ListView;*/
+
+import cz.zcu.pkozler.mkz.core.Expression;
+import cz.zcu.pkozler.mkz.core.ExpressionException;
+import cz.zcu.pkozler.mkz.core.tokens.OperatorType;
+import cz.zcu.pkozler.mkz.core.tokens.OtherTokenType;
 
 /**
  *
  * @author Petr Kozler
  */
-public class SolutionListing {
+public class EquationSolver {
 
-    /*private Expression expression;
-    private ListView<Double> listView;
+    private Expression expression;
+    private ArrayAdapter<Double> adapter;
 
-    public SolutionListing(Expression expression, ListView<Double> listView) {
+    public EquationSolver(Expression expression, ArrayAdapter<Double> adapter) {
         this.expression = expression;
-        this.listView = listView;
+        this.adapter = adapter;
     }
 
-    public void solve(String leftSideStr, String rightSideStr,
+    public List<Double> solve(String leftSideStr, String rightSideStr,
             double lowerBoundary, double upperBoundary, int stepCount)
-            throws AExpressionException {
+            throws ExpressionException {
         double minX = Math.min(lowerBoundary, upperBoundary);
         double maxX = Math.max(lowerBoundary, upperBoundary);
         double xStep = (maxX - minX) / stepCount;
 
         String funcStr = arrangeFunction(leftSideStr, rightSideStr);
         List<Double> solutions = findSolutions(funcStr, minX, maxX, xStep);
-        listView.setItems(FXCollections.observableArrayList(solutions));
+
+        return solutions;
     }
 
     private String arrangeFunction(String leftSideStr, String rightSideStr) {
@@ -47,7 +51,7 @@ public class SolutionListing {
     }
 
     private List<Double> findSolutions(String funcStr,
-            double minX, double maxX, double xStep) throws AExpressionException {
+                                       double minX, double maxX, double xStep) throws ExpressionException {
         List<Double> solutions = new ArrayList<>();
         double epsilon = xStep / 1000;
 
@@ -63,7 +67,7 @@ public class SolutionListing {
     }
 
     private Double findSolutionInInterval(String funcStr, double a, double b,
-            double epsilon) throws AExpressionException {
+            double epsilon) throws ExpressionException {
         double fA = expression.eval(funcStr, a);
         double fB = expression.eval(funcStr, b);
         
@@ -90,6 +94,6 @@ public class SolutionListing {
         }
         
         return (a + b) / 2;
-    }*/
+    }
 
 }

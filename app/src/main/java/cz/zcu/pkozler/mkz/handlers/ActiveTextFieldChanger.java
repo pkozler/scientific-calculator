@@ -10,6 +10,10 @@ public class ActiveTextFieldChanger {
     
     private EditText activeTextField;
 
+    public EditText getActiveTextField() {
+        return activeTextField;
+    }
+
     public void setActiveTextField(EditText textField) {
         activeTextField = textField;
     }
