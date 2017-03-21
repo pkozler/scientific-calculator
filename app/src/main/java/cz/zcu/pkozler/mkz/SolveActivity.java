@@ -57,7 +57,7 @@ public class SolveActivity extends BaseActivity {
                 leftInputText, rightInputText, lowerBoundaryInputText, upperBoundaryInputText, stepCountInputText);
 
         list = new ArrayList<>();
-        adapter = new ArrayAdapter<Double>(this, R.layout.simple_list_item, list);
+        adapter = new ArrayAdapter<>(this, R.layout.simple_list_item, R.id.simpleListTextView, list);
         listView.setAdapter(adapter);
     }
 
@@ -98,13 +98,14 @@ public class SolveActivity extends BaseActivity {
 
         try {
             List<Double> solutions = equationSolver.solve(left, right, lowerBoundary, upperBoundary, stepCount);
-            outputTextView.setText("x = ");
+            outputTextView.setText(R.string.solve_output);
             list.addAll(solutions);
             adapter.notifyDataSetChanged();
         }
         catch (ExpressionException e) {
             outputTextView.setText(e.getMessage());
         }
+
     }
 
 }

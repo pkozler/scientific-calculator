@@ -1,12 +1,8 @@
 package cz.zcu.pkozler.mkz;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -39,6 +35,9 @@ public class PlotActivity extends BaseActivity {
         inputText = (EditText)findViewById(R.id.plotInputText);
         outputTextView = (TextView)findViewById(R.id.plotOutputTextView);
         plotView = (PlotView)findViewById(R.id.plotView);
+        plotView.addDragListener(this);
+        plotView.addDoubleTapListener(this);
+        plotView.addScaleGestureListener(this);
 
         CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
         createOnFocusChangeListener(calculatorChanger.getActiveTextFieldChanger(), inputText);

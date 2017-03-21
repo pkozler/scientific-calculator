@@ -19,6 +19,8 @@
     <string name="solve_step_count_text">n</string>
     <string name="solve_step_count_text_view_end"> krocích</string>
     <string name="solve_button">Řešit</string>
+    <string name="plot_output">Graf funkce f(x):</string>
+    <string name="solve_output">Nalezené kořeny x:</string>
     <string name="error_invalid_symbols">Zadaný výraz obsahuje neplatné symboly.</string>
     <string name="error_misplaced_arg_separator">Oddělovač argumentů funkce je na nesprávném místě nebo chybí otevírací závorka.</string>
     <string name="error_missing_left_parentheses">Ve výrazu se nacházejí neotevřené závorky.</string>

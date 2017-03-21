@@ -1,17 +1,21 @@
 package cz.zcu.pkozler.mkz.customviews;
 
+import android.content.ClipData;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import cz.zcu.pkozler.mkz.BaseActivity;
 import cz.zcu.pkozler.mkz.R;
 import cz.zcu.pkozler.mkz.core.Expression;
 import cz.zcu.pkozler.mkz.core.ExpressionException;
@@ -20,7 +24,8 @@ import cz.zcu.pkozler.mkz.core.ExpressionException;
  * TODO: document your custom view class.
  */
 public class PlotView extends View {
-
+    private ScaleGestureDetector scaleGestureDetector;
+    private GestureDetector gestureDetector;
     private String funcStr;
     private Expression expression;
     private TextView outputTextView;
@@ -65,20 +70,17 @@ public class PlotView extends View {
             graphHeight = canvas.getHeight();
 
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(Color.WHITE);
             clearCanvas(canvas, paint);
-            paint.setColor(Color.GRAY);
-            paint.setStyle(Paint.Style.STROKE);
-            //Font font = Font.font("Arial", FontWeight.NORMAL, 10);
             drawAxes(canvas, paint);
-            paint.setColor(Color.BLACK);
 
-            try {
-                drawFunction(canvas, paint);
-                outputTextView.setText("f(x):");
-            }
-            catch (ExpressionException e) {
-                outputTextView.setText(e.getMessage());
+            if (!click) {
+                try {
+                    drawFunction(canvas, paint);
+                    outputTextView.setText(R.string.plot_output);
+                }
+                catch (ExpressionException e) {
+                    outputTextView.setText(e.getMessage());
+                }
             }
         }
 
@@ -94,69 +96,76 @@ public class PlotView extends View {
     }
 
     private void clearCanvas(Canvas canvas, Paint paint) {
+        paint.setColor(Color.WHITE);
         canvas.drawRect(0, 0, graphWidth, graphHeight, paint);
     }
 
     private void drawAxes(Canvas canvas, Paint paint) {
+        paint.setColor(Color.GRAY);
+        paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(0, 0, graphWidth, graphHeight, paint);
         ox = graphWidth / 2 - pX;
         oy = graphHeight / 2 + pY;
 
         canvas.drawLine(0, oy, graphWidth, oy, paint);
         canvas.drawLine(ox, 0, ox, graphHeight, paint);
+        paint.setTextSize(20);
+        paint.setStyle(Paint.Style.FILL);
 
         // kladná poloosa X
         double d = 0;
-        int axisX;
-        for (axisX = (int) ox; axisX <= graphWidth; axisX += 100) {
+        float axisX;
+        for (axisX = ox; axisX <= graphWidth; axisX += 100) {
             canvas.drawLine(axisX, oy - 5, axisX, oy + 5, paint);
 
-            /*if (d != 0) {
-                canvas.drawText(Double.toString(d), axisX - 5, oy - 10);
-            }*/
+            if (d != 0) {
+                canvas.drawText(Double.toString(d), axisX - 10, oy - 10, paint);
+            }
 
             d += 100 / zX;
         }
 
         // záporná poloosa X
         d = 0;
-        for (axisX = (int) ox; axisX >= 0; axisX -= 100) {
+        for (axisX = ox; axisX >= 0; axisX -= 100) {
             canvas.drawLine(axisX, oy - 5, axisX, oy + 5, paint);
 
-            /*if (d != 0) {
-                canvas.drawText(Double.toString(d), axisX - 5, oy + 15);
-            }*/
+            if (d != 0) {
+                canvas.drawText(Double.toString(d), axisX - 15, oy + 25, paint);
+            }
 
             d -= 100 / zX;
         }
 
         // záporná poloosa Y
         d = 0;
-        int axisY;
-        for (axisY = (int) oy; axisY <= graphHeight; axisY += 100) {
+        float axisY;
+        for (axisY = oy; axisY <= graphHeight; axisY += 100) {
             canvas.drawLine(ox - 5, axisY, ox + 5, axisY, paint);
 
-            /*if (d != 0) {
-                canvas.drawText(Double.toString(d), ox - 25, axisY);
-            }*/
+            if (d != 0) {
+                canvas.drawText(Double.toString(d), ox - 40, axisY + 5, paint);
+            }
 
             d -= 100 / zY;
         }
 
         // kladná poloosa Y
         d = 0;
-        for (axisY = (int) oy; axisY >= 0; axisY -= 100) {
+        for (axisY = oy; axisY >= 0; axisY -= 100) {
             canvas.drawLine(ox - 5, axisY, ox + 5, axisY, paint);
 
-            /*if (d != 0) {
-                canvas.drawText(Double.toString(d), ox + 10, axisY + 5);
-            }*/
+            if (d != 0) {
+                canvas.drawText(Double.toString(d), ox + 10, axisY + 5, paint);
+            }
 
             d += 100 / zY;
         }
     }
 
     private void drawFunction(Canvas canvas, Paint paint) throws ExpressionException {
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
         int min = Integer.MIN_VALUE / 2 + 1;
         int max = Integer.MAX_VALUE / 2 - 1;
 
@@ -199,114 +208,118 @@ public class PlotView extends View {
                 X0 = X;
                 Y0 = Y;
             }
+
             X += (1.0 / zX);
         }
     }
 
-    /*private void setListeners() {
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        scaleGestureDetector.onTouchEvent(e);
+        return gestureDetector.onTouchEvent(e);
+    }
 
-        this.addMouseListener(new MouseListener() {
-
+    public void addDragListener(final BaseActivity activity) {
+        this.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void mouseClicked(MouseEvent arg0) {
-                if (arg0.getClickCount() == 2) {
-                    switch (arg0.getButton()) {
-                        case MouseEvent.BUTTON1: {
-                            pX0 = 0;
-                            pY0 = 0;
-                            pX1 = 0;
-                            pY1 = 0;
-                            pX = 0;
-                            pY = 0;
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d("MOVE", Integer.toString(motionEvent.getAction()));
 
-                            repaint();
-                            break;
-                        }
-                        case MouseEvent.BUTTON2: {
-                            zX = 100;
-                            zY = 100;
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    pX0 = motionEvent.getX();
+                    pY0 = motionEvent.getY();
+                    click = true;
 
-                            repaint();
-                            break;
-                        }
-                        case MouseEvent.BUTTON3: {
-                            pX0 = 0;
-                            pY0 = 0;
-                            pX1 = 0;
-                            pY1 = 0;
-                            pX = 0;
-                            pY = 0;
-                            zX = 100;
-                            zY = 100;
+                    return true;
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    pX1 = pX;
+                    pY1 = pY;
+                    click = false;
 
-                            repaint();
-                            break;
-                        }
+                    start = false;
+                    invalidate();
+
+                    return true;
+                }
+                else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (click) {
+                        pX = -(motionEvent.getX() - pX0) + pX1;
+                        pY = (motionEvent.getY() - pY0) + pY1;
+
+                        start = false;
+                        invalidate();
                     }
+
+                    return true;
+                }
+                else {
+                    return false;
                 }
             }
-
-            @Override
-            public void mouseEntered(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                pX0 = arg0.getX();
-                pY0 = arg0.getY();
-                click = true;
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-                repaint();
-                pX1 = pX;
-                pY1 = pY;
-                click = false;
-            }
-
         });
+    }
 
-        this.addMouseMotionListener(new MouseMotionListener() {
-
-            @Override
-            public void mouseDragged(MouseEvent arg0) {
-                if (click) {
-                    pX = -(arg0.getX() - pX0) + pX1;
-                    pY = (arg0.getY() - pY0) + pY1;
-                    repaint();
-                }
-            }
+    public  void addScaleGestureListener(final BaseActivity activity) {
+        scaleGestureDetector = new ScaleGestureDetector(activity, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
             @Override
-            public void mouseMoved(MouseEvent arg0) {
+            public boolean onScale(ScaleGestureDetector detector) {
+                Log.d("TAG", "PINCH");
 
-            }
+                float factor = Math.abs(detector.getScaleFactor());
 
-        });
-
-        this.addMouseWheelListener(new MouseWheelListener() {
-
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent arg0) {
-
-                if (arg0.getPreciseWheelRotation() > 0) {
+                if (factor > 1) {
                     zX *= 2;
                     zY *= 2;
-                    repaint();
-                } else if (arg0.getPreciseWheelRotation() < 0) {
-                    zX /= 2;
-                    zY /= 2;
-                    repaint();
+                    start = false;
+                    invalidate();
+
+                    return true;
                 }
 
+                if (factor < 1) {
+                    zX /= 2;
+                    zY /= 2;
+                    start = false;
+                    invalidate();
+
+                    return true;
+                }
+
+                return false;
             }
 
         });
-    }*/
+    }
+
+    public void addDoubleTapListener(final BaseActivity activity) {
+        gestureDetector = new GestureDetector(activity, new GestureDetector.SimpleOnGestureListener() {
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                Log.d("TAG", "DOUBLETAP");
+
+                pX0 = 0;
+                pY0 = 0;
+                pX1 = 0;
+                pY1 = 0;
+                pX = 0;
+                pY = 0;
+                zX = 100;
+                zY = 100;
+                start = false;
+                invalidate();
+
+                return true;
+            }
+
+        });
+    }
 
 }
