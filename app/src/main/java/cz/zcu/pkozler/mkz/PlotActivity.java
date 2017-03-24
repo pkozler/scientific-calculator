@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import cz.zcu.pkozler.mkz.core.ExpressionException;
 import cz.zcu.pkozler.mkz.customviews.PlotView;
 import cz.zcu.pkozler.mkz.handlers.ActiveTextFieldChanger;
 import cz.zcu.pkozler.mkz.handlers.CalculatorChanger;
@@ -56,7 +57,15 @@ public class PlotActivity extends BaseActivity {
     }
 
     public void drawPlot(View v) {
-        plotView.draw(inputText.getText().toString(), expression, outputTextView);
+        String input = inputText.getText().toString();
+
+        if (input.isEmpty()) {
+            outputTextView.setText(R.string.plot_empty_output);
+
+            return;
+        }
+
+        plotView.draw(input, expression, outputTextView);
     }
 
 }

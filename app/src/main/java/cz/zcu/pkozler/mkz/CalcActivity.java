@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -71,7 +70,8 @@ public class CalcActivity extends BaseActivity {
                 String inputStr = inputText.getText().toString();
 
                 try {
-                    double outputVal = expression.eval(inputStr, null);
+                    expression.parse(inputStr);
+                    double outputVal = expression.evaluate(null);
 
                     outputTextView.setText(" = " + outputVal);
                 }

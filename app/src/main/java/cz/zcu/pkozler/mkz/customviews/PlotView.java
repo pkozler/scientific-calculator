@@ -1,19 +1,16 @@
 package cz.zcu.pkozler.mkz.customviews;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cz.zcu.pkozler.mkz.BaseActivity;
 import cz.zcu.pkozler.mkz.R;
@@ -24,11 +21,11 @@ import cz.zcu.pkozler.mkz.core.ExpressionException;
  * TODO: document your custom view class.
  */
 public class PlotView extends View {
+
+    private TextView outputTextView;
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
-    private String funcStr;
     private Expression expression;
-    private TextView outputTextView;
     private float ox;
     private float oy;
     private float range;
@@ -90,8 +87,15 @@ public class PlotView extends View {
     public void draw(String funcStr, Expression expression, TextView outputTextView) {
         start = false;
         this.expression = expression;
-        this.funcStr = funcStr;
         this.outputTextView = outputTextView;
+
+        try {
+            expression.parse(funcStr);
+        }
+        catch (ExpressionException e) {
+            outputTextView.setText(e.getMessage());
+        }
+
         invalidate();
     }
 
@@ -177,7 +181,7 @@ public class PlotView extends View {
         X = X0;
 
         while (X <= (pX / zX) + range) {
-            Y = expression.eval(funcStr, X);
+            Y = expression.evaluate(X);
 
             int a0, b0, a1, b1;
 

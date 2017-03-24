@@ -57,7 +57,7 @@ public class SolveActivity extends BaseActivity {
                 leftInputText, rightInputText, lowerBoundaryInputText, upperBoundaryInputText, stepCountInputText);
 
         list = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, R.layout.simple_list_item, R.id.simpleListTextView, list);
+        adapter = new ArrayAdapter<>(this, R.layout.simple_list_item, R.id.textView, list);
         listView.setAdapter(adapter);
     }
 
@@ -70,7 +70,7 @@ public class SolveActivity extends BaseActivity {
         calculatorChanger.setVariableMode(true);
         ActiveTextFieldChanger activeTextFieldChanger = calculatorChanger.getActiveTextFieldChanger();
         selectTextFieldToActivate(activeTextFieldChanger, leftInputText,
-                leftInputText, rightInputText, lowerBoundaryInputText, upperBoundaryInputText, stepCountInputText);
+                leftInputText, rightInputText);
         calculatorChanger.getButtonGridLayoutChanger().setGridLayout(this, gridLayout);
     }
 
@@ -91,21 +91,64 @@ public class SolveActivity extends BaseActivity {
         EquationSolver equationSolver = new EquationSolver(expression, adapter);
 
         String left = leftInputText.getText().toString();
+
+        if (left.isEmpty()) {
+            outputTextView.setText(R.string.solve_empty_output_left);
+
+            return;
+        }
+
         String right = rightInputText.getText().toString();
-        double lowerBoundary = Double.parseDouble(lowerBoundaryInputText.getText().toString());
-        double upperBoundary = Double.parseDouble(upperBoundaryInputText.getText().toString());
-        int stepCount = Integer.parseInt(stepCountInputText.getText().toString());
+
+        if (right.isEmpty()) {
+            outputTextView.setText(R.string.solve_empty_output_right);
+
+            return;
+        }
+
+        double lowerBoundary;
+
+        try {
+            lowerBoundary = Double.parseDouble(lowerBoundaryInputText.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            outputTextView.setText(R.string.solve_empty_output_lower_boundary);
+
+            return;
+        }
+
+        double upperBoundary;
+
+        try {
+            upperBoundary = Double.parseDouble(upperBoundaryInputText.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            outputTextView.setText(R.string.solve_empty_output_upper_boundary);
+
+            return;
+        }
+
+        int stepCount;
+
+        try {
+            stepCount = Integer.parseInt(stepCountInputText.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            outputTextView.setText(R.string.solve_empty_output_step_count);
+
+            return;
+        }
 
         try {
             List<Double> solutions = equationSolver.solve(left, right, lowerBoundary, upperBoundary, stepCount);
-            outputTextView.setText(R.string.solve_output);
+            list.clear();
             list.addAll(solutions);
             adapter.notifyDataSetChanged();
+            outputTextView.setText(solutions.isEmpty() ? R.string.solve_output_no_solution : R.string.solve_output);
         }
         catch (ExpressionException e) {
             outputTextView.setText(e.getMessage());
         }
-
     }
 
 }

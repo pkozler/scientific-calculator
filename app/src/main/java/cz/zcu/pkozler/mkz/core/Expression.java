@@ -23,20 +23,7 @@ import java.util.regex.Matcher;
  */
 public class Expression
 {
-    /// <summary>
-    /// poslední zadaný výraz
-    /// </summary>
-    private Queue<Token> lastInfix = null;
-
-    /// <summary>
-    /// postfixový výraz
-    /// </summary>
-    private Queue<Token> lastPostfix = null;
-
-    /// <summary>
-    /// výsledná vypočtená hodnota
-    /// </summary>
-    //private double value = 0;
+    private Queue<Token> postfix;
 
     /// <summary>
     /// Vyhodnotí zadaný výraz. Vyhodnocení je rozděleno do čtyř fází:
@@ -53,33 +40,25 @@ public class Expression
     /// <param name="str">matematický výraz v in-fixovém zápisu</param>
     /// <param name="var">hodnoty proměnné v matematickém výrazu</param>
     /// <returns>výsledek vyhodnocení</returns>
-    public double eval(String str, Double var) throws ExpressionException
-    {
-        // předzpracování výrazu
-        String exp = preprocess(str);
-        Queue<Token> infix = tokenize(exp);
-        double value;
+    public void parse(String str) throws ExpressionException {
+        String expression = preprocessInput(str);
+        Queue<Token> infix = tokenizeToInfix(expression);
 
-        if (infix == null || infix.isEmpty())
-        {
-            this.lastInfix = null;
-            this.lastPostfix = null;
-            
+        if (infix == null || infix.isEmpty()) {
+            postfix = null;
+
+            return;
+        }
+
+        postfix = convertToPostfix(infix);
+    }
+
+    public double evaluate(Double val) throws ExpressionException {
+        if (postfix == null || postfix.isEmpty()) {
             throw new ExpressionException(null);
         }
 
-        // nový zadaný výraz je odlišný od předchozího
-        if (this.lastInfix == null || !areEqual(this.lastInfix, infix))
-        {
-            // program provede nový převod i výpočet
-            this.lastInfix = infix;
-            this.lastPostfix = parse(infix);
-        }
-        
-        value = calculate(lastPostfix, var);
-        
-        // výsledek vyhodnocení
-        return value;
+        return calculateValue(val);
     }
 
     /// <summary>
@@ -87,7 +66,7 @@ public class Expression
     /// </summary>
     /// <param name="str">řetězec původního zadaného výrazu</param>
     /// <returns>řetězec předzpracovaného výrazu</returns>
-    private String preprocess(String str)
+    private String preprocessInput(String str)
     {
         str = str.toLowerCase();
         
@@ -105,7 +84,7 @@ public class Expression
     /// </summary>
     /// <param name="str">řetězec předzpracovaného výrazu</param>
     /// <returns>seznam tokenů výrazu v in-fixové notaci</returns>
-    private Queue<Token> tokenize(String str) throws ExpressionException
+    private Queue<Token> tokenizeToInfix(String str) throws ExpressionException
     {
         Queue<Token> infix = new LinkedList<>();
         Matcher matcher;
@@ -162,9 +141,9 @@ public class Expression
     /// </summary>
     /// <param name="lastInfix">seznam tokenů výrazu v in-fixové notaci</param>
     /// <returns>seznam tokenů výrazu v post-fixové notaci</returns>
-    private Queue<Token> parse(Queue<Token> infix) throws ExpressionException
+    private Queue<Token> convertToPostfix(Queue<Token> infix) throws ExpressionException
     {
-        Queue<Token> postfix = new LinkedList<>();
+        postfix = new LinkedList<>();
         Stack<Token> stack = new Stack<>();
 
         // Dokud jsou zde tokeny ke čtení: Přečti token.
@@ -268,7 +247,7 @@ public class Expression
     /// <param name="lastPostfix">seznam tokenů výrazu v in-fixové notaci</param>
     /// <param name="x">hodnota proměnné</param>
     /// <returns>vypočtená hodnota</returns>
-    private double calculate(Queue<Token> postfix, Double x) throws ExpressionException
+    private double calculateValue(Double x) throws ExpressionException
     {
         Stack<Token> stack = new Stack<>();
 
@@ -332,24 +311,6 @@ public class Expression
         return ((Number)stack.pop()).VALUE;
     }
 
-    /// <summary>
-    /// Vrátí in-fixový výraz po předzpracování.
-    /// </summary>
-    /// <returns>in-fixový výraz</returns>
-    public String GetLastInfix()
-    {
-        return lastInfix == null ? "" : joinStr(" ", lastInfix);
-    }
-
-    /// <summary>
-    /// Vrátí výraz po převodu do post-fixového zápisu.
-    /// </summary>
-    /// <returns>post-fixový výraz</returns>
-    public String GetLastPostfix()
-    {
-        return lastPostfix == null ? "" : joinStr(" ", lastPostfix);
-    }
-    
     /**
      * Spojí pole tokenů do řetězce.
      * 

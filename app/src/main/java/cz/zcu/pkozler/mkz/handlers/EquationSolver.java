@@ -1,8 +1,6 @@
 package cz.zcu.pkozler.mkz.handlers;
 
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +16,7 @@ import cz.zcu.pkozler.mkz.core.tokens.OtherTokenType;
  */
 public class EquationSolver {
 
+    private static final double ACCURACY_COEFFICIENT = 10e18;
     private Expression expression;
     private ArrayAdapter<Double> adapter;
 
@@ -52,11 +51,12 @@ public class EquationSolver {
 
     private List<Double> findSolutions(String funcStr,
                                        double minX, double maxX, double xStep) throws ExpressionException {
+        expression.parse(funcStr);
         List<Double> solutions = new ArrayList<>();
-        double epsilon = xStep / 1000;
+        double epsilon = xStep / ACCURACY_COEFFICIENT;
 
         for (double x = minX; x < maxX; x += xStep) {
-            Double solution = findSolutionInInterval(funcStr, x, x + xStep, epsilon);
+            Double solution = findSolutionInInterval(x, x + xStep, epsilon);
 
             if (solution != null) {
                 solutions.add(solution);
@@ -66,10 +66,10 @@ public class EquationSolver {
         return solutions;
     }
 
-    private Double findSolutionInInterval(String funcStr, double a, double b,
+    private Double findSolutionInInterval(double a, double b,
             double epsilon) throws ExpressionException {
-        double fA = expression.eval(funcStr, a);
-        double fB = expression.eval(funcStr, b);
+        double fA = expression.evaluate(a);
+        double fB = expression.evaluate(b);
         
         if (fA * fB >= 0) {
             return null;
@@ -77,7 +77,7 @@ public class EquationSolver {
         
         while (Math.abs(a - b) > epsilon) {
             double c = (a + b) / 2;
-            double fC = expression.eval(funcStr, c);
+            double fC = expression.evaluate(c);
             
             if (fC * fA == 0 || fC * fB == 0) {
                 return c;
@@ -89,8 +89,8 @@ public class EquationSolver {
                 b = c;
             }
             
-            fA = expression.eval(funcStr, a);
-            fB = expression.eval(funcStr, b);
+            fA = expression.evaluate(a);
+            fB = expression.evaluate(b);
         }
         
         return (a + b) / 2;

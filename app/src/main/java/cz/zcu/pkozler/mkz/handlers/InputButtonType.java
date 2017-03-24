@@ -144,6 +144,7 @@ public enum InputButtonType {
         Button button = new Button(activity);
         button.setMinHeight(0);
         button.setMinimumHeight(0);
+        button.setAllCaps(false);
 
         if (type != null) {
             button.setText(type.title);

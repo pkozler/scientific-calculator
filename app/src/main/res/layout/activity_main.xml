@@ -25,8 +25,8 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="362dp"
-            android:layout_height="490dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -42,8 +42,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/calculation"
                 android:onClick="calcActivity"
                 android:text="@string/title_activity_calc"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="258dp"
                 tools:layout_editor_absoluteY="16dp" />
 
@@ -52,8 +54,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/function"
                 android:onClick="plotActivity"
                 android:text="@string/title_activity_plot"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="269dp"
                 tools:layout_editor_absoluteY="91dp" />
 
@@ -62,8 +66,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/equation"
                 android:onClick="solveActivity"
                 android:text="@string/title_activity_solve"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="232dp"
                 tools:layout_editor_absoluteY="168dp" />
         </LinearLayout>

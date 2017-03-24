@@ -1,5 +1,6 @@
 package cz.zcu.pkozler.mkz.handlers;
 
+import android.text.InputType;
 import android.widget.EditText;
 
 /**

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vědecká kalkulačka</string>
-    <string name="action_settings">Nastavení</string>
+    <string name="title_activity_main">Hlavní menu</string>
     <string name="title_activity_calc">Výpočet výrazu</string>
     <string name="title_activity_plot">Zobrazení funkcí</string>
     <string name="title_activity_solve">Řešení rovnic</string>
@@ -15,12 +15,19 @@
     <string name="solve_lower_boundary_text">a</string>
     <string name="solve_upper_boundary_text_view"> do </string>
     <string name="solve_upper_boundary_text">b</string>
-    <string name="solve_step_count_text_view"> po </string>
+    <string name="solve_step_count_text_view">, kroků: </string>
     <string name="solve_step_count_text">n</string>
-    <string name="solve_step_count_text_view_end"> krocích</string>
     <string name="solve_button">Řešit</string>
     <string name="plot_output">Graf funkce f(x):</string>
-    <string name="solve_output">Nalezené kořeny x:</string>
+    <string name="plot_empty_output">Zadejte funkci</string>
+    <string name="solve_output">Nalezená řešení x:</string>
+    <string name="solve_output_no_solution">Nenalezeno žádné řešení</string>
+    <string name="solve_output_inf_solutions">Nekonečně mnoho řešení</string>
+    <string name="solve_empty_output_left">Zadejte levou stranu</string>
+    <string name="solve_empty_output_right">Zadejte pravou stranu</string>
+    <string name="solve_empty_output_lower_boundary">Zadejte dolní mez</string>
+    <string name="solve_empty_output_upper_boundary">Zadejte horní mez</string>
+    <string name="solve_empty_output_step_count">Zadejte počet kroků</string>
     <string name="error_invalid_symbols">Zadaný výraz obsahuje neplatné symboly.</string>
     <string name="error_misplaced_arg_separator">Oddělovač argumentů funkce je na nesprávném místě nebo chybí otevírací závorka.</string>
     <string name="error_missing_left_parentheses">Ve výrazu se nacházejí neotevřené závorky.</string>
