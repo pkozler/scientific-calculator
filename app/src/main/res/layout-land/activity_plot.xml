@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="cz.zcu.pkozler.mkz.PlotActivity">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,19 +26,18 @@
         <LinearLayout
             android:id="@+id/plotLinearLayout"
             android:layout_width="0dp"
-            android:layout_height="300dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="240dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="64dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/plotGridLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5">
+            app:layout_constraintRight_toLeftOf="@+id/plotGridLayout"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,9 +45,8 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="39dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/plot_text_view"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
@@ -67,9 +64,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/plotOutputTextView"
@@ -95,34 +90,35 @@
                     android:id="@+id/plotView"
                     class="cz.zcu.pkozler.mkz.customviews.PlotView"
                     id="@+id/view3"
-                    android:layout_width="320dp"
-                    android:layout_height="180dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="240dp"
+                    android:layout_height="135dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5" />
             </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 
         <GridLayout
             android:id="@+id/plotGridLayout"
-            android:layout_width="0dp"
+            android:layout_width="360dp"
             android:layout_height="240dp"
             android:layout_marginBottom="0dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.5">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
         </GridLayout>
-
     </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>
