@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -23,8 +24,6 @@ import cz.zcu.pkozler.mkz.core.ExpressionException;
 public class PlotView extends View {
 
     private TextView outputTextView;
-    private ScaleGestureDetector scaleGestureDetector;
-    private GestureDetector gestureDetector;
     private Expression expression;
     private float ox;
     private float oy;
@@ -42,20 +41,64 @@ public class PlotView extends View {
     private boolean click = false;
     private boolean start = true;
 
+    private class TouchListener implements OnTouchListener {
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                pX0 = motionEvent.getX();
+                pY0 = motionEvent.getY();
+                click = true;
+
+                return true;
+            }
+            else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                pX1 = pX;
+                pY1 = pY;
+                click = false;
+
+                start = false;
+                invalidate();
+
+                return true;
+            }
+            else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                if (click) {
+                    pX = -(motionEvent.getX() - pX0) + pX1;
+                    pY = (motionEvent.getY() - pY0) + pY1;
+
+                    start = false;
+                    invalidate();
+                }
+
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+    }
+
     public PlotView(Context context) {
         super(context);
+        this.setOnTouchListener(new TouchListener());
     }
 
     public PlotView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setOnTouchListener(new TouchListener());
     }
 
     public PlotView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setOnTouchListener(new TouchListener());
     }
 
     public PlotView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        this.setOnTouchListener(new TouchListener());
     }
 
     @Override
@@ -86,6 +129,15 @@ public class PlotView extends View {
 
     public void draw(String funcStr, Expression expression, TextView outputTextView) {
         start = false;
+        pX0 = 0;
+        pY0 = 0;
+        pX1 = 0;
+        pY1 = 0;
+        pX = 0;
+        pY = 0;
+        zX = 100;
+        zY = 100;
+
         this.expression = expression;
         this.outputTextView = outputTextView;
 
@@ -217,59 +269,12 @@ public class PlotView extends View {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        scaleGestureDetector.onTouchEvent(e);
-        return gestureDetector.onTouchEvent(e);
-    }
-
-    public void addDragListener(final BaseActivity activity) {
-        this.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d("MOVE", Integer.toString(motionEvent.getAction()));
-
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    pX0 = motionEvent.getX();
-                    pY0 = motionEvent.getY();
-                    click = true;
-
-                    return true;
-                }
-                else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    pX1 = pX;
-                    pY1 = pY;
-                    click = false;
-
-                    start = false;
-                    invalidate();
-
-                    return true;
-                }
-                else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                    if (click) {
-                        pX = -(motionEvent.getX() - pX0) + pX1;
-                        pY = (motionEvent.getY() - pY0) + pY1;
-
-                        start = false;
-                        invalidate();
-                    }
-
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-        });
-    }
-
-    public  void addScaleGestureListener(final BaseActivity activity) {
+    /*public  void addScaleGestureListener(final BaseActivity activity) {
         scaleGestureDetector = new ScaleGestureDetector(activity, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                Log.d("TAG", "PINCH");
+                //Log.d("TAG", "PINCH");
 
                 float factor = Math.abs(detector.getScaleFactor());
 
@@ -295,35 +300,6 @@ public class PlotView extends View {
             }
 
         });
-    }
-
-    public void addDoubleTapListener(final BaseActivity activity) {
-        gestureDetector = new GestureDetector(activity, new GestureDetector.SimpleOnGestureListener() {
-
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return true;
-            }
-
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                Log.d("TAG", "DOUBLETAP");
-
-                pX0 = 0;
-                pY0 = 0;
-                pX1 = 0;
-                pY1 = 0;
-                pX = 0;
-                pY = 0;
-                zX = 100;
-                zY = 100;
-                start = false;
-                invalidate();
-
-                return true;
-            }
-
-        });
-    }
+    }*/
 
 }

@@ -36,9 +36,6 @@ public class PlotActivity extends BaseActivity {
         inputText = (EditText)findViewById(R.id.plotInputText);
         outputTextView = (TextView)findViewById(R.id.plotOutputTextView);
         plotView = (PlotView)findViewById(R.id.plotView);
-        plotView.addDragListener(this);
-        plotView.addDoubleTapListener(this);
-        plotView.addScaleGestureListener(this);
 
         CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
         createOnFocusChangeListener(calculatorChanger.getActiveTextFieldChanger(), inputText);

@@ -88,8 +88,6 @@ public class SolveActivity extends BaseActivity {
     }
 
     public void findSolution(View v) {
-        EquationSolver equationSolver = new EquationSolver(expression, adapter);
-
         String left = leftInputText.getText().toString();
 
         if (left.isEmpty()) {
@@ -139,16 +137,8 @@ public class SolveActivity extends BaseActivity {
             return;
         }
 
-        try {
-            List<Double> solutions = equationSolver.solve(left, right, lowerBoundary, upperBoundary, stepCount);
-            list.clear();
-            list.addAll(solutions);
-            adapter.notifyDataSetChanged();
-            outputTextView.setText(solutions.isEmpty() ? R.string.solve_output_no_solution : R.string.solve_output);
-        }
-        catch (ExpressionException e) {
-            outputTextView.setText(e.getMessage());
-        }
+        EquationSolver equationSolver = new EquationSolver(expression, list, adapter, outputTextView);
+        equationSolver.solve(left, right, lowerBoundary, upperBoundary, stepCount);
     }
 
 }
