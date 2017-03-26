@@ -90,18 +90,39 @@
                     android:id="@+id/plotView"
                     class="cz.zcu.pkozler.mkz.customviews.PlotView"
                     id="@+id/view3"
-                    android:layout_width="240dp"
-                    android:layout_height="135dp"
+                    android:layout_width="220dp"
+                    android:layout_height="140dp"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginRight="0dp"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5" />
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <Button
+                    android:id="@+id/zoomOutButton"
+                    android:layout_width="30dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="0dp"
+                    android:text="-"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <Button
+                    android:id="@+id/zoomInButton"
+                    android:layout_width="30dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="10dp"
+                    android:text="+"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>

@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <cz.zcu.pkozler.mkz.customviews.PlotView
-        android:layout_width="300dp"
+        android:layout_width="348dp"
         android:layout_height="300dp"
         android:background="#ccc"
         android:paddingBottom="40dp"

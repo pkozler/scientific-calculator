@@ -4,16 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import cz.zcu.pkozler.mkz.BaseActivity;
 import cz.zcu.pkozler.mkz.R;
 import cz.zcu.pkozler.mkz.core.Expression;
 import cz.zcu.pkozler.mkz.core.ExpressionException;
@@ -39,7 +35,6 @@ public class PlotView extends View {
     private float pX1;
     private float pY1;
     private boolean click = false;
-    private boolean start = true;
 
     private class TouchListener implements OnTouchListener {
 
@@ -57,8 +52,6 @@ public class PlotView extends View {
                 pX1 = pX;
                 pY1 = pY;
                 click = false;
-
-                start = false;
                 invalidate();
 
                 return true;
@@ -67,8 +60,6 @@ public class PlotView extends View {
                 if (click) {
                     pX = -(motionEvent.getX() - pX0) + pX1;
                     pY = (motionEvent.getY() - pY0) + pY1;
-
-                    start = false;
                     invalidate();
                 }
 
@@ -83,52 +74,84 @@ public class PlotView extends View {
 
     public PlotView(Context context) {
         super(context);
-        this.setOnTouchListener(new TouchListener());
     }
 
     public PlotView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setOnTouchListener(new TouchListener());
     }
 
     public PlotView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.setOnTouchListener(new TouchListener());
     }
 
     public PlotView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public void addListeners(Button zoomInButton, Button zoomOutButton) {
+        if (zoomInButton == null || zoomOutButton == null) {
+            return;
+        }
+
         this.setOnTouchListener(new TouchListener());
+
+        zoomInButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                zX *= 2;
+                zY *= 2;
+                click = false;
+                invalidate();
+            }
+
+        });
+
+        zoomOutButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                zX /= 2;
+                zY /= 2;
+                click = false;
+                invalidate();
+            }
+
+        });
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (!start) {
-            graphWidth = canvas.getWidth();
-            graphHeight = canvas.getHeight();
-
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            clearCanvas(canvas, paint);
-            drawAxes(canvas, paint);
-
-            if (!click) {
-                try {
-                    drawFunction(canvas, paint);
-                    outputTextView.setText(R.string.plot_output);
-                }
-                catch (ExpressionException e) {
-                    outputTextView.setText(e.getMessage());
-                }
-            }
+        if (expression == null || outputTextView == null) {
+            return;
         }
 
-        start = true;
+        graphWidth = canvas.getWidth();
+        graphHeight = canvas.getHeight();
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        clearCanvas(canvas, paint);
+        drawAxes(canvas, paint);
+
+        if (!click) {
+            try {
+                drawFunction(canvas, paint);
+                outputTextView.setText(R.string.plot_output);
+            }
+            catch (ExpressionException e) {
+                outputTextView.setText(e.getMessage());
+            }
+        }
     }
 
     public void draw(String funcStr, Expression expression, TextView outputTextView) {
-        start = false;
+        if (expression == null || outputTextView == null
+                || funcStr == null || funcStr.isEmpty()) {
+            return;
+        }
+
         pX0 = 0;
         pY0 = 0;
         pX1 = 0;
@@ -143,12 +166,12 @@ public class PlotView extends View {
 
         try {
             expression.parse(funcStr);
+
+            invalidate();
         }
         catch (ExpressionException e) {
             outputTextView.setText(e.getMessage());
         }
-
-        invalidate();
     }
 
     private void clearCanvas(Canvas canvas, Paint paint) {
@@ -268,38 +291,5 @@ public class PlotView extends View {
             X += (1.0 / zX);
         }
     }
-
-    /*public  void addScaleGestureListener(final BaseActivity activity) {
-        scaleGestureDetector = new ScaleGestureDetector(activity, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                //Log.d("TAG", "PINCH");
-
-                float factor = Math.abs(detector.getScaleFactor());
-
-                if (factor > 1) {
-                    zX *= 2;
-                    zY *= 2;
-                    start = false;
-                    invalidate();
-
-                    return true;
-                }
-
-                if (factor < 1) {
-                    zX /= 2;
-                    zY /= 2;
-                    start = false;
-                    invalidate();
-
-                    return true;
-                }
-
-                return false;
-            }
-
-        });
-    }*/
 
 }

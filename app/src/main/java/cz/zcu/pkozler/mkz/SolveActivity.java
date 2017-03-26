@@ -9,6 +9,7 @@ import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,30 @@ public class SolveActivity extends BaseActivity {
         selectTextFieldToActivate(activeTextFieldChanger, leftInputText,
                 leftInputText, rightInputText);
         calculatorChanger.getButtonGridLayoutChanger().setGridLayout(this, gridLayout);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        String result = outputTextView.getText().toString();
+        savedInstanceState.putString("Result", result == null ? "" : result);
+        savedInstanceState.putSerializable("Solutions", (Serializable) list);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        String result = savedInstanceState.getString("Result");
+        outputTextView.setText(result);
+        List<Double> solutions = (List<Double>) savedInstanceState.getSerializable("Solutions");
+
+        if (solutions != null) {
+            list.addAll(solutions);
+        }
     }
 
     private void selectTextFieldToActivate(ActiveTextFieldChanger activeTextFieldChanger,
