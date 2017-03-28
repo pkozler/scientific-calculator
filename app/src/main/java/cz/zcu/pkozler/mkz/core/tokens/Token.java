@@ -2,6 +2,8 @@ package cz.zcu.pkozler.mkz.core.tokens;
 
 import java.util.Objects;
 
+import cz.zcu.pkozler.mkz.core.tokens.types.OtherTokenType;
+
 /**
  * Třída představující obecné tokeny v matematickém výrazu zpracovávaném
  * algoritmem Shunting-Yard. Takový token může být číslo, proměnná, konstanta,

@@ -9,13 +9,42 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import cz.zcu.pkozler.mkz.core.ExpressionException;
-import cz.zcu.pkozler.mkz.handlers.ActiveTextFieldChanger;
-import cz.zcu.pkozler.mkz.handlers.CalculatorChanger;
+import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
+import cz.zcu.pkozler.mkz.ui.CalculatorContext;
 
 public class CalcActivity extends BaseActivity {
 
     private EditText inputText;
     private TextView outputTextView;
+
+    private class TextChangedListener implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // žádná akce
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // žádná akce
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String inputStr = inputText.getText().toString();
+
+            try {
+                getCalculatorContext().getExpression().parse(inputStr);
+                double outputVal = getCalculatorContext().getExpression().evaluate(null);
+
+                outputTextView.setText(" = " + outputVal);
+            }
+            catch (ExpressionException e) {
+                outputTextView.setText(errorMessages.get(e.CODE));
+            }
+        }
+
+    }
 
     public CalcActivity() {
         super(true);
@@ -30,14 +59,12 @@ public class CalcActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initializeEvaluator();
-
         inputText = (EditText)findViewById(R.id.calcInputText);
         outputTextView = (TextView)findViewById(R.id.calcOutputTextView);
 
-        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
-        createOnFocusChangeListener(calculatorChanger.getActiveTextFieldChanger(), inputText);
-        createTextWatcher(inputText);
+        createErrorMessages();
+        createOnFocusChangeListener(getCalculatorContext().getActiveEditTextHandler(), inputText);
+        inputText.addTextChangedListener(new TextChangedListener());
     }
 
     @Override
@@ -45,41 +72,10 @@ public class CalcActivity extends BaseActivity {
         super.onResume();
 
         GridLayout gridLayout = (GridLayout)findViewById(R.id.calcGridLayout);
-        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
-        calculatorChanger.setVariableMode(false);
-        ActiveTextFieldChanger activeTextFieldChanger = calculatorChanger.getActiveTextFieldChanger();
-        activeTextFieldChanger.setActiveTextField(inputText);
-        calculatorChanger.getButtonGridLayoutChanger().setGridLayout(this, gridLayout);
-    }
-
-    private void createTextWatcher(final EditText inputText) {
-        inputText.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // žádná akce
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // žádná akce
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String inputStr = inputText.getText().toString();
-
-                try {
-                    expression.parse(inputStr);
-                    double outputVal = expression.evaluate(null);
-
-                    outputTextView.setText(" = " + outputVal);
-                }
-                catch (ExpressionException ex) {
-                    outputTextView.setText(errorMessages.get(ex.CODE));
-                }
-            }
-        });
+        getCalculatorContext().getButtonGridLayoutHandler().setVariableMode(false);
+        ActiveEditTextHandler activeEditTextHandler = getCalculatorContext().getActiveEditTextHandler();
+        activeEditTextHandler.setActiveTextField(inputText);
+        getCalculatorContext().getButtonGridLayoutHandler().setGridLayout(this, gridLayout);
     }
 
 }

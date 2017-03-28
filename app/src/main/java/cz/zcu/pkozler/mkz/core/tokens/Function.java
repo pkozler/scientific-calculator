@@ -2,6 +2,7 @@ package cz.zcu.pkozler.mkz.core.tokens;
 
 import cz.zcu.pkozler.mkz.core.ExpressionException;
 import cz.zcu.pkozler.mkz.core.helpers.AuxiliaryMath;
+import cz.zcu.pkozler.mkz.core.tokens.types.FunctionType;
 
 /**
  * Třída představující funkce v matematickém výrazu.

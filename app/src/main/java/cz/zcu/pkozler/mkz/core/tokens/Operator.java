@@ -1,5 +1,7 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
+import cz.zcu.pkozler.mkz.core.tokens.types.OperatorType;
+
 /**
  * Třída představující operátory v matematickém výrazu.
  *

@@ -9,8 +9,7 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import cz.zcu.pkozler.mkz.customviews.PlotView;
-import cz.zcu.pkozler.mkz.handlers.ActiveTextFieldChanger;
-import cz.zcu.pkozler.mkz.handlers.CalculatorChanger;
+import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
 
 public class PlotActivity extends BaseActivity {
 
@@ -31,14 +30,12 @@ public class PlotActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initializeEvaluator();
-
         inputText = (EditText)findViewById(R.id.plotInputText);
         outputTextView = (TextView)findViewById(R.id.plotOutputTextView);
         plotView = (PlotView)findViewById(R.id.plotView);
 
-        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
-        createOnFocusChangeListener(calculatorChanger.getActiveTextFieldChanger(), inputText);
+        createErrorMessages();
+        createOnFocusChangeListener(getCalculatorContext().getActiveEditTextHandler(), inputText);
     }
 
     @Override
@@ -46,11 +43,10 @@ public class PlotActivity extends BaseActivity {
         super.onResume();
 
         GridLayout gridLayout = (GridLayout)findViewById(R.id.plotGridLayout);
-        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
-        calculatorChanger.setVariableMode(true);
-        ActiveTextFieldChanger activeTextFieldChanger = calculatorChanger.getActiveTextFieldChanger();
-        activeTextFieldChanger.setActiveTextField(inputText);
-        calculatorChanger.getButtonGridLayoutChanger().setGridLayout(this, gridLayout);
+        getCalculatorContext().getButtonGridLayoutHandler().setVariableMode(true);
+        ActiveEditTextHandler activeEditTextHandler = getCalculatorContext().getActiveEditTextHandler();
+        activeEditTextHandler.setActiveTextField(inputText);
+        getCalculatorContext().getButtonGridLayoutHandler().setGridLayout(this, gridLayout);
 
         Button zoomInButton = (Button)findViewById(R.id.zoomInButton);
         Button zoomOutButton = (Button)findViewById(R.id.zoomOutButton);
@@ -71,7 +67,7 @@ public class PlotActivity extends BaseActivity {
 
         String result = savedInstanceState.getString("Result");
         outputTextView.setText(result);
-        plotView.draw(inputText.getText().toString(), expression, outputTextView);
+        plotView.draw(inputText.getText().toString(), getCalculatorContext().getExpression(), outputTextView, errorMessages);
     }
 
     public void drawPlot(View v) {
@@ -83,7 +79,7 @@ public class PlotActivity extends BaseActivity {
             return;
         }
 
-        plotView.draw(input, expression, outputTextView);
+        plotView.draw(input, getCalculatorContext().getExpression(), outputTextView, errorMessages);
     }
 
 }

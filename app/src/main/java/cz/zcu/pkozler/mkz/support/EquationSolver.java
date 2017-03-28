@@ -1,16 +1,18 @@
-package cz.zcu.pkozler.mkz.handlers;
+package cz.zcu.pkozler.mkz.support;
 
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cz.zcu.pkozler.mkz.R;
 import cz.zcu.pkozler.mkz.core.Expression;
 import cz.zcu.pkozler.mkz.core.ExpressionException;
-import cz.zcu.pkozler.mkz.core.tokens.OperatorType;
-import cz.zcu.pkozler.mkz.core.tokens.OtherTokenType;
+import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
+import cz.zcu.pkozler.mkz.core.tokens.types.OperatorType;
+import cz.zcu.pkozler.mkz.core.tokens.types.OtherTokenType;
 
 /**
  *
@@ -19,17 +21,19 @@ import cz.zcu.pkozler.mkz.core.tokens.OtherTokenType;
 public class EquationSolver {
 
     private static final double ACCURACY_COEFFICIENT = 10e18;
+    protected HashMap<ExpressionExceptionCode, String> errorMessages;
     private Expression expression;
     private List<Double> list;
     private ArrayAdapter<Double> adapter;
     private TextView outputTextView;
 
     public EquationSolver(Expression expression, List<Double> list, ArrayAdapter<Double> adapter,
-                          TextView outputTextView) {
+                          TextView outputTextView, HashMap<ExpressionExceptionCode, String> errorMessages) {
         this.expression = expression;
         this.list = list;
         this.adapter = adapter;
         this.outputTextView = outputTextView;
+        this.errorMessages = errorMessages;
     }
 
     public void solve(String leftSideStr, String rightSideStr,
@@ -60,7 +64,7 @@ public class EquationSolver {
             outputTextView.setText(answer);
         }
         catch (ExpressionException e) {
-            outputTextView.setText(e.getMessage());
+            outputTextView.setText(errorMessages.get(e.CODE));
         }
     }
 

@@ -1,4 +1,4 @@
-package cz.zcu.pkozler.mkz.core.tokens;
+package cz.zcu.pkozler.mkz.core.tokens.types;
 
 /**
  *

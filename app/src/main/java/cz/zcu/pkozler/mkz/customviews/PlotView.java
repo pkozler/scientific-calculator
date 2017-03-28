@@ -10,15 +10,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import cz.zcu.pkozler.mkz.R;
 import cz.zcu.pkozler.mkz.core.Expression;
 import cz.zcu.pkozler.mkz.core.ExpressionException;
+import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
 
 /**
  * TODO: document your custom view class.
  */
 public class PlotView extends View {
 
+    protected HashMap<ExpressionExceptionCode, String> errorMessages;
     private TextView outputTextView;
     private Expression expression;
     private float ox;
@@ -141,14 +145,15 @@ public class PlotView extends View {
                 outputTextView.setText(R.string.plot_output);
             }
             catch (ExpressionException e) {
-                outputTextView.setText(e.getMessage());
+                outputTextView.setText(errorMessages.get(e.CODE));
             }
         }
     }
 
-    public void draw(String funcStr, Expression expression, TextView outputTextView) {
+    public void draw(String funcStr, Expression expression, TextView outputTextView, HashMap<ExpressionExceptionCode, String> errorMessages) {
         if (expression == null || outputTextView == null
-                || funcStr == null || funcStr.isEmpty()) {
+                || errorMessages == null || errorMessages.isEmpty()
+                ||funcStr == null || funcStr.isEmpty()) {
             return;
         }
 
@@ -163,6 +168,7 @@ public class PlotView extends View {
 
         this.expression = expression;
         this.outputTextView = outputTextView;
+        this.errorMessages = errorMessages;
 
         try {
             expression.parse(funcStr);
@@ -170,7 +176,7 @@ public class PlotView extends View {
             invalidate();
         }
         catch (ExpressionException e) {
-            outputTextView.setText(e.getMessage());
+            outputTextView.setText(errorMessages.get(e.CODE));
         }
     }
 
@@ -269,19 +275,14 @@ public class PlotView extends View {
                 Y0 = Y;
             }
             else {
-                try {
-                    a0 = (int) ((ox + X0 * zX));
-                    b0 = (int) ((oy - Y0 * zY));
-                    a1 = (int) ((ox + X * zX));
-                    b1 = (int) ((oy - Y * zY));
+                a0 = (int) ((ox + X0 * zX));
+                b0 = (int) ((oy - Y0 * zY));
+                a1 = (int) ((ox + X * zX));
+                b1 = (int) ((oy - Y * zY));
 
-                    if (!(Math.abs(Y - Y0) >= 1000 / zY && Math.min(Y0, Y) < 0 && Math
-                            .max(Y0, Y) > 0)) {
-                        canvas.drawLine(a0, b0, a1, b1, paint);
-                    }
-                }
-                catch (Exception e) {
-                    // chyba při vykreslení
+                if (!(Math.abs(Y - Y0) >= 1000 / zY && Math.min(Y0, Y) < 0 && Math
+                        .max(Y0, Y) > 0)) {
+                    canvas.drawLine(a0, b0, a1, b1, paint);
                 }
 
                 X0 = X;

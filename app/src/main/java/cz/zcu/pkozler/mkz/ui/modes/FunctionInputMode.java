@@ -1,4 +1,4 @@
-package cz.zcu.pkozler.mkz.handlers;
+package cz.zcu.pkozler.mkz.ui.modes;
 
 /**
  *

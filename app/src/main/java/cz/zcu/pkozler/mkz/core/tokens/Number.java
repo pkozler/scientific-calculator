@@ -1,5 +1,7 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
+import cz.zcu.pkozler.mkz.core.tokens.types.ConstantType;
+
 /**
  * Třída představující hodnoty (čísla) v matematickém výrazu, které lze vytvořit
  * podle zadané číselné hodnoty nebo textové reprezentace včetně zkratky pro

@@ -13,10 +13,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.zcu.pkozler.mkz.core.ExpressionException;
-import cz.zcu.pkozler.mkz.handlers.ActiveTextFieldChanger;
-import cz.zcu.pkozler.mkz.handlers.CalculatorChanger;
-import cz.zcu.pkozler.mkz.handlers.EquationSolver;
+import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
+import cz.zcu.pkozler.mkz.ui.CalculatorContext;
+import cz.zcu.pkozler.mkz.support.EquationSolver;
 
 public class SolveActivity extends BaseActivity {
 
@@ -43,8 +42,6 @@ public class SolveActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initializeEvaluator();
-
         leftInputText = (EditText)findViewById(R.id.solveLeftInputText);
         rightInputText = (EditText)findViewById(R.id.solveRightInputText);
         lowerBoundaryInputText = (EditText)findViewById(R.id.solveLowerBoundaryText);
@@ -53,8 +50,8 @@ public class SolveActivity extends BaseActivity {
         outputTextView = (TextView)findViewById(R.id.solveOutputTextView);
         listView = (ListView)findViewById(R.id.solveListView);
 
-        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
-        createOnFocusChangeListener(calculatorChanger.getActiveTextFieldChanger(),
+        createErrorMessages();
+        createOnFocusChangeListener(getCalculatorContext().getActiveEditTextHandler(),
                 leftInputText, rightInputText, lowerBoundaryInputText, upperBoundaryInputText, stepCountInputText);
 
         list = new ArrayList<>();
@@ -67,12 +64,11 @@ public class SolveActivity extends BaseActivity {
         super.onResume();
 
         GridLayout gridLayout = (GridLayout)findViewById(R.id.solveGridLayout);
-        CalculatorChanger calculatorChanger = (CalculatorChanger)getApplication();
-        calculatorChanger.setVariableMode(true);
-        ActiveTextFieldChanger activeTextFieldChanger = calculatorChanger.getActiveTextFieldChanger();
-        selectTextFieldToActivate(activeTextFieldChanger, leftInputText,
+        getCalculatorContext().getButtonGridLayoutHandler().setVariableMode(true);
+        ActiveEditTextHandler activeEditTextHandler = getCalculatorContext().getActiveEditTextHandler();
+        selectTextFieldToActivate(activeEditTextHandler, leftInputText,
                 leftInputText, rightInputText);
-        calculatorChanger.getButtonGridLayoutChanger().setGridLayout(this, gridLayout);
+        getCalculatorContext().getButtonGridLayoutHandler().setGridLayout(this, gridLayout);
 
         adapter.notifyDataSetChanged();
     }
@@ -99,17 +95,17 @@ public class SolveActivity extends BaseActivity {
         }
     }
 
-    private void selectTextFieldToActivate(ActiveTextFieldChanger activeTextFieldChanger,
+    private void selectTextFieldToActivate(ActiveEditTextHandler activeEditTextHandler,
                                            EditText defaultEditText, EditText... editTexts) {
         for (EditText editText : editTexts) {
-            if (activeTextFieldChanger.getActiveTextField() == editText) {
-                activeTextFieldChanger.setActiveTextField(editText);
+            if (activeEditTextHandler.getActiveTextField() == editText) {
+                activeEditTextHandler.setActiveTextField(editText);
 
                 return;
             }
         }
 
-        activeTextFieldChanger.setActiveTextField(defaultEditText);
+        activeEditTextHandler.setActiveTextField(defaultEditText);
     }
 
     public void findSolution(View v) {
@@ -162,7 +158,8 @@ public class SolveActivity extends BaseActivity {
             return;
         }
 
-        EquationSolver equationSolver = new EquationSolver(expression, list, adapter, outputTextView);
+        EquationSolver equationSolver = new EquationSolver(getCalculatorContext().getExpression(),
+                list, adapter, outputTextView, errorMessages);
         equationSolver.solve(left, right, lowerBoundary, upperBoundary, stepCount);
     }
 

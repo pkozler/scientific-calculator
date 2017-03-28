@@ -1,9 +1,10 @@
-package cz.zcu.pkozler.mkz.handlers;
+package cz.zcu.pkozler.mkz.ui.handlers.buttons;
 
 import android.view.View;
-import android.widget.Button;
 
-import cz.zcu.pkozler.mkz.BaseActivity;
+import cz.zcu.pkozler.mkz.ui.modes.AngleMode;
+import cz.zcu.pkozler.mkz.ui.modes.FunctionInputMode;
+import cz.zcu.pkozler.mkz.ui.modes.InputMode;
 
 /**
  *
@@ -118,8 +119,8 @@ public enum InputButtonType {
     public final FunctionInputMode FUNCTION_INPUT_MODE;
     public final AngleMode ANGLE_MODE;
     public final Boolean HAS_VARIABLE;
+    private String text;
     private View.OnClickListener listener;
-    private String title;
     
     InputButtonType(int row, int col, InputMode inputMode,
             FunctionInputMode functionInputMode, AngleMode angleMode, Boolean hasVariable) {
@@ -131,31 +132,17 @@ public enum InputButtonType {
         HAS_VARIABLE = hasVariable;
     }
 
-    public void setTitleAndListener(String title, View.OnClickListener listener) {
-        this.title = title;
-        this.listener = listener;
+    public static void setAdditionalProperties(InputButtonType type, String text, View.OnClickListener listener) {
+        type.text = text;
+        type.listener = listener;
     }
 
-    public static Button createButton(BaseActivity activity, InputButtonType type) {
-        if (activity == null) {
-            return null;
-        }
+    public String getText() {
+        return text;
+    }
 
-        Button button = new Button(activity);
-        button.setMinHeight(0);
-        button.setMinimumHeight(0);
-        button.setAllCaps(false);
-
-        if (type != null) {
-            button.setText(type.title);
-            button.setOnClickListener(type.listener);
-        }
-        else {
-            button.setText("");
-            button.setEnabled(false);
-        }
-
-        return button;
+    public View.OnClickListener getListener() {
+        return listener;
     }
 
 }

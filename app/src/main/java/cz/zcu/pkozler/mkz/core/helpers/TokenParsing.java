@@ -1,9 +1,9 @@
 package cz.zcu.pkozler.mkz.core.helpers;
 
-import cz.zcu.pkozler.mkz.core.tokens.ConstantType;
-import cz.zcu.pkozler.mkz.core.tokens.FunctionType;
-import cz.zcu.pkozler.mkz.core.tokens.OperatorType;
-import cz.zcu.pkozler.mkz.core.tokens.OtherTokenType;
+import cz.zcu.pkozler.mkz.core.tokens.types.ConstantType;
+import cz.zcu.pkozler.mkz.core.tokens.types.FunctionType;
+import cz.zcu.pkozler.mkz.core.tokens.types.OperatorType;
+import cz.zcu.pkozler.mkz.core.tokens.types.OtherTokenType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;

@@ -3,7 +3,7 @@
     package="cz.zcu.pkozler.mkz">
 
     <application
-        android:name=".handlers.CalculatorChanger"
+        android:name=".ui.CalculatorContext"
         android:allowBackup="true"
         android:icon="@drawable/calculator"
         android:label="@string/app_name"

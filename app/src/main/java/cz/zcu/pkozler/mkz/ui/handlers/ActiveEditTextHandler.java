@@ -1,13 +1,12 @@
-package cz.zcu.pkozler.mkz.handlers;
+package cz.zcu.pkozler.mkz.ui.handlers;
 
-import android.text.InputType;
 import android.widget.EditText;
 
 /**
  *
  * @author Petr Kozler
  */
-public class ActiveTextFieldChanger {
+public class ActiveEditTextHandler {
     
     private EditText activeTextField;
 
@@ -25,7 +24,8 @@ public class ActiveTextFieldChanger {
     
     public void removeChar() {
         String str = activeTextField.getText().toString();
-        
+        str = str.replaceAll("\\s+$", "");
+
         if (str.length() < 1) {
             return;
         }
