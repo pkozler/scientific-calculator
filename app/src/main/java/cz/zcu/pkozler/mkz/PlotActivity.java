@@ -11,11 +11,16 @@ import android.widget.TextView;
 import cz.zcu.pkozler.mkz.customviews.PlotView;
 import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
 
+/**
+ *
+ * @author Petr Kozler
+ */
 public class PlotActivity extends BaseActivity {
 
     private EditText inputText;
     private TextView outputTextView;
     private PlotView plotView;
+    private PlotView.TouchListener touchListener;
 
     public PlotActivity() {
         super(true);
@@ -50,7 +55,7 @@ public class PlotActivity extends BaseActivity {
 
         Button zoomInButton = (Button)findViewById(R.id.zoomInButton);
         Button zoomOutButton = (Button)findViewById(R.id.zoomOutButton);
-        plotView.addListeners(zoomInButton, zoomOutButton);
+        touchListener = plotView.createGraphListeners(zoomInButton, zoomOutButton);
     }
 
     @Override
@@ -67,7 +72,8 @@ public class PlotActivity extends BaseActivity {
 
         String result = savedInstanceState.getString("Result");
         outputTextView.setText(result);
-        plotView.draw(inputText.getText().toString(), getCalculatorContext().getExpression(), outputTextView, errorMessages);
+        plotView.draw(inputText.getText().toString(), getCalculatorContext().getEvaluator(),
+                outputTextView, touchListener, errorMessages);
     }
 
     public void drawPlot(View v) {
@@ -79,7 +85,8 @@ public class PlotActivity extends BaseActivity {
             return;
         }
 
-        plotView.draw(input, getCalculatorContext().getExpression(), outputTextView, errorMessages);
+        plotView.draw(input, getCalculatorContext().getEvaluator(),
+                outputTextView, touchListener, errorMessages);
     }
 
 }

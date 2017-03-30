@@ -13,52 +13,62 @@ import cz.zcu.pkozler.mkz.core.tokens.types.OtherTokenType;
  */
 public class Token {
 
-    /// <summary>
-    /// textová reprezentace tokenu
-    /// </summary>
+    /**
+     * textová reprezentace tokenu
+     **/
     protected String str;
 
-    /// <summary>
-    /// Vytvoří nový token.
-    /// </summary>
-    /// <param name="str">textová reprezentace</param>
+    /**
+     * Vytvoří nový token.
+     * 
+     * @param str textová reprezentace
+     **/
     public Token(String str) {
         this.str = str;
     }
 
-    /// <summary>
-    /// Určí, zda je token levá závorka.
-    /// </summary>
-    /// <returns>TRUE, pokud je token levá závorka, jinak FALSE</returns>
+    /**
+     * Určí, zda je token levá závorka.
+     * 
+     * @return TRUE, pokud je token levá závorka, jinak FALSE
+     **/
     public boolean isLeftParenthesis() {
-        return OtherTokenType.LEFT_PARENTHESIS.KEYWORD.equals(str);
+        return OtherTokenType.LEFT_PARENTHESIS.stringEquals(str);
     }
 
-    /// <summary>
-    /// Určí, zda je token pravá závorka.
-    /// </summary>
-    /// <returns>TRUE, pokud je token pravá závorka, jinak FALSE</returns>
+    /**
+     * Určí, zda je token pravá závorka.
+     * 
+     * @return TRUE, pokud je token pravá závorka, jinak FALSE
+     **/
     public boolean isRightParenthesis() {
-        return OtherTokenType.RIGHT_PARENTHESIS.KEYWORD.equals(str);
+        return OtherTokenType.RIGHT_PARENTHESIS.stringEquals(str);
     }
 
-    /// <summary>
-    /// Určí, zda je token oddělovač argumentů funkce (čárka).
-    /// </summary>
-    /// <returns>TRUE, pokud je token čárka, jinak FALSE</returns>
+    /**
+     * Určí, zda je token oddělovač argumentů funkce (čárka).
+     * 
+     * @return TRUE, pokud je token čárka, jinak FALSE
+     **/
     public boolean isArgumentSeparator() {
-        return OtherTokenType.ARG_SEPARATOR.KEYWORD.equals(str);
+        return OtherTokenType.ARG_SEPARATOR.stringEquals(str);
     }
 
-    /// <summary>
-    /// Vrátí textovou reprezentaci tokenu.
-    /// </summary>
-    /// <returns>textová reprezentace</returns>
+    /**
+     * Vrátí textovou reprezentaci tokenu.
+     * 
+     * @return textová reprezentace
+     */
     @Override
     public String toString() {
         return str;
     }
 
+    /**
+     * Vypočítá hashcode tokenu na základě jeho textové reprezentace.
+     *
+     * @return hashcode tokenu
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -66,6 +76,13 @@ public class Token {
         return hash;
     }
 
+    /**
+     * Otestuje shodu s předaným tokenem. Tokeny jsou považovánny za shodné právě tehdy, mají-li
+     * totožnou textovou reprezentaci.
+     *
+     * @param obj porovnávaný token
+     * @return true, je-li předaný token shodný, jinak false
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -78,7 +95,7 @@ public class Token {
             return false;
         }
         final Token other = (Token) obj;
-        if (!Objects.equals(this.str, other.str)) {
+        if (!this.str.equals(other.str)) {
             return false;
         }
         return true;

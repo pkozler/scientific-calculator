@@ -1,8 +1,8 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
-import cz.zcu.pkozler.mkz.core.ExpressionException;
+import cz.zcu.pkozler.mkz.core.EvaluatorException;
 import cz.zcu.pkozler.mkz.core.helpers.AuxiliaryMath;
-import cz.zcu.pkozler.mkz.core.tokens.types.FunctionType;
+import cz.zcu.pkozler.mkz.core.tokens.types.FunctionTokenType;
 
 /**
  * Třída představující funkce v matematickém výrazu.
@@ -11,220 +11,222 @@ import cz.zcu.pkozler.mkz.core.tokens.types.FunctionType;
  */
 public class Function extends Token {
 
-    /// <summary>
-    /// minimální povolený počet argumentů funkce
-    /// </summary>
+    /**
+     * minimální povolený počet argumentů funkce
+     **/
     public final int MIN_ARGC;
 
-    /// <summary>
-    /// maximální povolený počet argumentů funkce
-    /// </summary>
+    /**
+     * maximální povolený počet argumentů funkce
+     **/
     public final int MAX_ARGC;
 
-    /// <summary>
-    /// Vytvoří novou funkci a nastaví příslušný interval pro platný počet argumentů.
-    /// </summary>
-    /// <param name="str">textová reprezentace</param>
+    /**
+     * Vytvoří novou funkci a nastaví příslušný interval pro platný počet argumentů.
+     * 
+     * @param str textová reprezentace
+     **/
     public Function(String str) {
         super(str);
 
-        if (FunctionType.YROOT.KEYWORD.equals(str)) {
+        if (FunctionTokenType.YROOT.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 2;
-        } else if (FunctionType.ACOSG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSG.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ACOSH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSH.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ASIND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASIND.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ASING.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASING.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ACOSD.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSD.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ATAND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATAND.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ATANG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATANG.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ATANH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATANH.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.FLOOR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.FLOOR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ASINH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASINH.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.CBRT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.CBRT.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.TANG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TANG.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.SING.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SING.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.SINH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SINH.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.TANH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TANH.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ATANR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATANR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.FRAC.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.FRAC.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.SQRT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SQRT.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.SIND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SIND.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ACOSR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.TAND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TAND.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.COSH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSH.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.COSG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSG.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.COSD.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSD.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.ASINR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASINR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.CEIL.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.CEIL.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.FACT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.FACT.stringEquals(str)) {
             MIN_ARGC = 1;
             MAX_ARGC = 2;
-        } else if (FunctionType.ABS.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ABS.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.REC.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.REC.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.POW.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.POW.stringEquals(str)) {
             MIN_ARGC = 1;
             MAX_ARGC = 2;
-        } else if (FunctionType.LOG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.LOG.stringEquals(str)) {
             MIN_ARGC = 1;
             MAX_ARGC = 2;
-        } else if (FunctionType.SGN.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SGN.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.INT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.INT.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.TANR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TANR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.DMS.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.DMS.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.DEG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.DEG.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.COSR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.SINR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SINR.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.EXP.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.EXP.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.LN.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.LN.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.CB.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.CB.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
-        } else if (FunctionType.SQ.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SQ.stringEquals(str)) {
             MIN_ARGC = MAX_ARGC = 1;
         } else {
             MIN_ARGC = MAX_ARGC = 0;
         }
     }
 
-    /// <summary>
-    /// Provede příslušný výpočet nad předanými argumenty a vrátí nové číslo představující výsledek.
-    /// </summary>
-    /// <param name="args">seznam argumentů funkce</param>
-    /// <returns>výsledek výpočtu</returns>
-    public Number calc(Number... args) throws ExpressionException {
-        if (FunctionType.YROOT.KEYWORD.equals(str)) {
+    /**
+     * Provede příslušný výpočet nad předanými argumenty a vrátí nové číslo představující výsledek.
+     * 
+     * @param args seznam argumentů funkce
+     * @return výsledek výpočtu
+     **/
+    public Number calc(Number... args) throws EvaluatorException {
+        if (FunctionTokenType.YROOT.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.yroot(args[1].VALUE, args[0].VALUE));
-        } else if (FunctionType.ACOSG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSG.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.acosg((args[0].VALUE)));
-        } else if (FunctionType.ACOSH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSH.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.acosh(args[0].VALUE));
-        } else if (FunctionType.ASIND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASIND.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.asind((args[0].VALUE)));
-        } else if (FunctionType.ASING.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASING.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.asing((args[0].VALUE)));
-        } else if (FunctionType.ACOSD.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSD.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.acosd((args[0].VALUE)));
-        } else if (FunctionType.ATAND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATAND.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.atand((args[0].VALUE)));
-        } else if (FunctionType.ATANG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATANG.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.atang((args[0].VALUE)));
-        } else if (FunctionType.ATANH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATANH.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.atanh(args[0].VALUE));
-        } else if (FunctionType.FLOOR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.FLOOR.stringEquals(str)) {
             return Number.createNumber(Math.floor(args[0].VALUE));
-        } else if (FunctionType.ASINH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASINH.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.asinh(args[0].VALUE));
-        } else if (FunctionType.CBRT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.CBRT.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.cbrt(args[0].VALUE));
-        } else if (FunctionType.TANG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TANG.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.tang((args[0].VALUE)));
-        } else if (FunctionType.SING.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SING.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.sing((args[0].VALUE)));
-        } else if (FunctionType.SINH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SINH.stringEquals(str)) {
             return Number.createNumber(Math.sinh(args[0].VALUE));
-        } else if (FunctionType.TANH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TANH.stringEquals(str)) {
             return Number.createNumber(Math.tanh(args[0].VALUE));
-        } else if (FunctionType.ATANR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ATANR.stringEquals(str)) {
             return Number.createNumber(Math.atan(args[0].VALUE));
-        } else if (FunctionType.FRAC.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.FRAC.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.fraction(args[0].VALUE));
-        } else if (FunctionType.SQRT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SQRT.stringEquals(str)) {
             return Number.createNumber(Math.sqrt(args[0].VALUE));
-        } else if (FunctionType.SIND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SIND.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.sind((args[0].VALUE)));
-        } else if (FunctionType.ACOSR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ACOSR.stringEquals(str)) {
             return Number.createNumber(Math.acos(args[0].VALUE));
-        } else if (FunctionType.TAND.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TAND.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.tand((args[0].VALUE)));
-        } else if (FunctionType.COSH.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSH.stringEquals(str)) {
             return Number.createNumber(Math.cosh(args[0].VALUE));
-        } else if (FunctionType.COSG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSG.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.acosg((args[0].VALUE)));
-        } else if (FunctionType.COSD.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSD.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.cosd((args[0].VALUE)));
-        } else if (FunctionType.ASINR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ASINR.stringEquals(str)) {
             return Number.createNumber(Math.asin(args[0].VALUE));
-        } else if (FunctionType.CEIL.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.CEIL.stringEquals(str)) {
             return Number.createNumber(Math.ceil(args[0].VALUE));
-        } else if (FunctionType.FACT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.FACT.stringEquals(str)) {
             if (args.length == 1) {
                 return Number.createNumber(AuxiliaryMath.factorial(args[0].VALUE));
             } else {
                 return Number.createNumber(AuxiliaryMath.factorial(args[1].VALUE, args[0].VALUE));
             }
-        } else if (FunctionType.ABS.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.ABS.stringEquals(str)) {
             return Number.createNumber(Math.abs(args[0].VALUE));
-        } else if (FunctionType.REC.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.REC.stringEquals(str)) {
             return Number.createNumber(1 / args[0].VALUE);
-        } else if (FunctionType.POW.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.POW.stringEquals(str)) {
             if (args.length == 1) {
                 return Number.createNumber(Math.pow(args[0].VALUE, 10));
             } else {
                 return Number.createNumber(Math.pow(args[1].VALUE, args[0].VALUE));
             }
-        } else if (FunctionType.LOG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.LOG.stringEquals(str)) {
             if (args.length == 1) {
                 return Number.createNumber(Math.log10(args[0].VALUE));
             } else {
                 return Number.createNumber(Math.log(args[1].VALUE) / Math.log(args[0].VALUE));
             }
-        } else if (FunctionType.SGN.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SGN.stringEquals(str)) {
             return Number.createNumber(Math.signum(args[0].VALUE));
-        } else if (FunctionType.INT.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.INT.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.integer(args[0].VALUE));
-        } else if (FunctionType.TANR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.TANR.stringEquals(str)) {
             return Number.createNumber(Math.tan(args[0].VALUE));
-        } else if (FunctionType.DMS.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.DMS.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.dms(args[0].VALUE));
-        } else if (FunctionType.DEG.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.DEG.stringEquals(str)) {
             return Number.createNumber(AuxiliaryMath.deg(args[0].VALUE));
-        } else if (FunctionType.COSR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.COSR.stringEquals(str)) {
             return Number.createNumber(Math.cos(args[0].VALUE));
-        } else if (FunctionType.SINR.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SINR.stringEquals(str)) {
             return Number.createNumber(Math.sin(args[0].VALUE));
-        } else if (FunctionType.EXP.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.EXP.stringEquals(str)) {
             return Number.createNumber(Math.exp(args[0].VALUE));
-        } else if (FunctionType.LN.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.LN.stringEquals(str)) {
             return Number.createNumber(Math.log(args[0].VALUE));
-        } else if (FunctionType.CB.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.CB.stringEquals(str)) {
             return Number.createNumber(args[0].VALUE * args[0].VALUE * args[0].VALUE);
-        } else if (FunctionType.SQ.KEYWORD.equals(str)) {
+        } else if (FunctionTokenType.SQ.stringEquals(str)) {
             return Number.createNumber(args[0].VALUE * args[0].VALUE);
         }
 

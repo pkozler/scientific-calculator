@@ -13,57 +13,68 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import cz.zcu.pkozler.mkz.R;
-import cz.zcu.pkozler.mkz.core.Expression;
-import cz.zcu.pkozler.mkz.core.ExpressionException;
-import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
+import cz.zcu.pkozler.mkz.core.Evaluator;
+import cz.zcu.pkozler.mkz.core.EvaluatorException;
+import cz.zcu.pkozler.mkz.core.EvaluatorExceptionCode;
 
 /**
- * TODO: document your custom view class.
+ *
+ * @author Petr Kozler
  */
 public class PlotView extends View {
 
-    protected HashMap<ExpressionExceptionCode, String> errorMessages;
-    private TextView outputTextView;
-    private Expression expression;
-    private float ox;
-    private float oy;
-    private float range;
-    private float graphWidth;
-    private float graphHeight;
-    private float pX = 0;
-    private float pY = 0;
-    private float zX = 100;
-    private float zY = 100;
-    private float pX0;
-    private float pY0;
-    private float pX1;
-    private float pY1;
-    private boolean click = false;
+    private final double GRAPH_MIN_VALUE = Integer.MIN_VALUE / 2 + 1;
+    private final double GRAPH_MAX_VALUE = Integer.MAX_VALUE / 2 - 1;
 
-    private class TouchListener implements OnTouchListener {
+    protected HashMap<EvaluatorExceptionCode, String> errorMessages;
+    private TextView outputTextView;
+    private Evaluator evaluator;
+    private double scaleX;
+    private double scaleY;
+    private double translateX;
+    private double translateY;
+    private boolean touch;
+
+    public class TouchListener implements OnTouchListener {
+
+        private double translateX0;
+        private double translateY0;
+        private double translateX1;
+        private double translateY1;
+
+        public TouchListener() {
+            clearGraphTranslationValues();
+        }
+
+        public void clearGraphTranslationValues() {
+            translateX0 = 0;
+            translateY0 = 0;
+            translateX1 = 0;
+            translateY1 = 0;
+        }
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
 
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                pX0 = motionEvent.getX();
-                pY0 = motionEvent.getY();
-                click = true;
+                translateX0 = motionEvent.getX();
+                translateY0 = motionEvent.getY();
+                touch = true;
 
                 return true;
             }
             else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                pX1 = pX;
-                pY1 = pY;
-                click = false;
+                translateX1 = translateX;
+                translateY1 = translateY;
+                touch = false;
                 invalidate();
 
                 return true;
             }
             else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                if (click) {
-                    pX = -(motionEvent.getX() - pX0) + pX1;
-                    pY = (motionEvent.getY() - pY0) + pY1;
+                if (touch) {
+                    translateX = -(motionEvent.getX() - translateX0) + translateX1;
+                    translateY = (motionEvent.getY() - translateY0) + translateY1;
                     invalidate();
                 }
 
@@ -92,20 +103,20 @@ public class PlotView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void addListeners(Button zoomInButton, Button zoomOutButton) {
+    public TouchListener createGraphListeners(Button zoomInButton, Button zoomOutButton) {
         if (zoomInButton == null || zoomOutButton == null) {
-            return;
+            return null;
         }
 
-        this.setOnTouchListener(new TouchListener());
+        touch = false;
 
         zoomInButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                zX *= 2;
-                zY *= 2;
-                click = false;
+                scaleX *= 2;
+                scaleY *= 2;
+                touch = false;
                 invalidate();
             }
 
@@ -115,182 +126,213 @@ public class PlotView extends View {
 
             @Override
             public void onClick(View v) {
-                zX /= 2;
-                zY /= 2;
-                click = false;
+                scaleX /= 2;
+                scaleY /= 2;
+                touch = false;
                 invalidate();
             }
 
         });
+
+        TouchListener touchListener = new TouchListener();
+        this.setOnTouchListener(touchListener);
+
+        return touchListener;
+    }
+
+    public void draw(String funcStr, Evaluator evaluator, TextView outputTextView,
+                     TouchListener touchListener, HashMap<EvaluatorExceptionCode, String> errorMessages) {
+        if (evaluator == null || outputTextView == null
+                || errorMessages == null || errorMessages.isEmpty()
+                ||funcStr == null || funcStr.isEmpty()) {
+            return;
+        }
+
+        this.evaluator = evaluator;
+        this.outputTextView = outputTextView;
+        this.errorMessages = errorMessages;
+
+        centerGraph(touchListener);
+
+        try {
+            evaluator.parse(funcStr);
+
+            invalidate();
+        }
+        catch (EvaluatorException e) {
+            outputTextView.setText(errorMessages.get(e.CODE));
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (expression == null || outputTextView == null) {
+        if (evaluator == null || outputTextView == null) {
             return;
         }
 
-        graphWidth = canvas.getWidth();
-        graphHeight = canvas.getHeight();
+        // určení rozměrů grafu a souřadnic počátku
+        double graphWidth = canvas.getWidth();
+        double graphHeight = canvas.getHeight();
+        double originX = graphWidth / 2 - translateX;
+        double originY = graphHeight / 2 + translateY;
 
+        // vyčištění plátna a nakreslení číslovaných os nového grafu funkce
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        clearCanvas(canvas, paint);
-        drawAxes(canvas, paint);
+        clearCanvas(canvas, paint, graphWidth, graphHeight);
+        drawAxes(canvas, paint, graphWidth, graphHeight, originX, originY);
 
-        if (!click) {
+        if (!touch) {
+            double range = (100.0f / scaleX) * (graphWidth / 200.0f);
+
             try {
-                drawFunction(canvas, paint);
+                // nakreslení grafu funkce
+                drawPlot(canvas, paint, originX, originY, range);
                 outputTextView.setText(R.string.plot_output);
             }
-            catch (ExpressionException e) {
+            catch (EvaluatorException e) {
                 outputTextView.setText(errorMessages.get(e.CODE));
             }
         }
     }
 
-    public void draw(String funcStr, Expression expression, TextView outputTextView, HashMap<ExpressionExceptionCode, String> errorMessages) {
-        if (expression == null || outputTextView == null
-                || errorMessages == null || errorMessages.isEmpty()
-                ||funcStr == null || funcStr.isEmpty()) {
-            return;
+    private void centerGraph(TouchListener touchListener) {
+        if (touchListener != null) {
+            touchListener.clearGraphTranslationValues();
         }
 
-        pX0 = 0;
-        pY0 = 0;
-        pX1 = 0;
-        pY1 = 0;
-        pX = 0;
-        pY = 0;
-        zX = 100;
-        zY = 100;
-
-        this.expression = expression;
-        this.outputTextView = outputTextView;
-        this.errorMessages = errorMessages;
-
-        try {
-            expression.parse(funcStr);
-
-            invalidate();
-        }
-        catch (ExpressionException e) {
-            outputTextView.setText(errorMessages.get(e.CODE));
-        }
+        translateX = 0;
+        translateY = 0;
+        scaleX = 100;
+        scaleY = 100;
     }
 
-    private void clearCanvas(Canvas canvas, Paint paint) {
+    private void clearCanvas(Canvas canvas, Paint paint, double graphWidth, double graphHeight) {
+        // přemazání aktuálního obsahu plátna
         paint.setColor(Color.WHITE);
-        canvas.drawRect(0, 0, graphWidth, graphHeight, paint);
-    }
-
-    private void drawAxes(Canvas canvas, Paint paint) {
+        canvas.drawRect((float) 0, (float) 0, (float) graphWidth, (float) graphHeight, paint);
+        // nakreslení nového obrysu plátna
         paint.setColor(Color.GRAY);
         paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(0, 0, graphWidth, graphHeight, paint);
-        ox = graphWidth / 2 - pX;
-        oy = graphHeight / 2 + pY;
+        canvas.drawRect((float) 0, (float) 0, (float) graphWidth, (float) graphHeight, paint);
+    }
 
-        canvas.drawLine(0, oy, graphWidth, oy, paint);
-        canvas.drawLine(ox, 0, ox, graphHeight, paint);
+    private void drawAxes(Canvas canvas, Paint paint, double graphWidth, double graphHeight,
+                          double originX, double originY) {
+        // nakreslení os grafu
+        canvas.drawLine((float) 0, (float) originY, (float) graphWidth, (float) originY, paint);
+        canvas.drawLine((float) originX, (float) 0, (float) originX, (float) graphHeight, paint);
+
+        // nastavení velikosti písma pro popisky os
         paint.setTextSize(20);
         paint.setStyle(Paint.Style.FILL);
 
-        // kladná poloosa X
+        // vykreslení popisků kladné poloosy X
         double d = 0;
-        float axisX;
-        for (axisX = ox; axisX <= graphWidth; axisX += 100) {
-            canvas.drawLine(axisX, oy - 5, axisX, oy + 5, paint);
+        double axisX;
+        for (axisX = originX; axisX <= graphWidth; axisX += 100) {
+            canvas.drawLine((float) axisX, (float) originY - 5, (float) axisX, (float) originY + 5, paint);
 
             if (d != 0) {
-                canvas.drawText(Double.toString(d), axisX - 10, oy - 10, paint);
+                canvas.drawText(Double.toString(d), (float) axisX - 10, (float) originY - 10, paint);
             }
 
-            d += 100 / zX;
+            d += 100 / scaleX;
         }
 
-        // záporná poloosa X
+        // vykreslení popisků záporné poloosy X
         d = 0;
-        for (axisX = ox; axisX >= 0; axisX -= 100) {
-            canvas.drawLine(axisX, oy - 5, axisX, oy + 5, paint);
+        for (axisX = originX; axisX >= 0; axisX -= 100) {
+            canvas.drawLine((float) axisX, (float) originY - 5, (float) axisX, (float) originY + 5, paint);
 
             if (d != 0) {
-                canvas.drawText(Double.toString(d), axisX - 15, oy + 25, paint);
+                canvas.drawText(Double.toString(d), (float) axisX - 15, (float) originY + 25, paint);
             }
 
-            d -= 100 / zX;
+            d -= 100 / scaleX;
         }
 
-        // záporná poloosa Y
+        // vykreslení popisků záporné poloosy Y
         d = 0;
-        float axisY;
-        for (axisY = oy; axisY <= graphHeight; axisY += 100) {
-            canvas.drawLine(ox - 5, axisY, ox + 5, axisY, paint);
+        double axisY;
+        for (axisY = originY; axisY <= graphHeight; axisY += 100) {
+            canvas.drawLine((float) originX - 5, (float) axisY, (float) originX + 5, (float) axisY, paint);
 
             if (d != 0) {
-                canvas.drawText(Double.toString(d), ox - 40, axisY + 5, paint);
+                canvas.drawText(Double.toString(d), (float) originX - 40, (float) axisY + 5, paint);
             }
 
-            d -= 100 / zY;
+            d -= 100 / scaleY;
         }
 
-        // kladná poloosa Y
+        // vykreslení popisků kladné poloosy Y
         d = 0;
-        for (axisY = oy; axisY >= 0; axisY -= 100) {
-            canvas.drawLine(ox - 5, axisY, ox + 5, axisY, paint);
+        for (axisY = originY; axisY >= 0; axisY -= 100) {
+            canvas.drawLine((float) originX - 5, (float) axisY, (float) originX + 5, (float) axisY, paint);
 
             if (d != 0) {
-                canvas.drawText(Double.toString(d), ox + 10, axisY + 5, paint);
+                canvas.drawText(Double.toString(d), (float) originX + 10, (float) axisY + 5, paint);
             }
 
-            d += 100 / zY;
+            d += 100 / scaleY;
         }
     }
 
-    private void drawFunction(Canvas canvas, Paint paint) throws ExpressionException {
-        paint.setColor(Color.BLACK);
+    private void drawPlot(Canvas canvas, Paint paint, double originX, double originY, double range)
+            throws EvaluatorException {
         paint.setStyle(Paint.Style.STROKE);
-        int min = Integer.MIN_VALUE / 2 + 1;
-        int max = Integer.MAX_VALUE / 2 - 1;
 
-        double X0, Y0, X, Y;
+        // inicializace proměnných pro uchování souřadnic bodů aktuálně kreslené spojnice v grafu
+        double valueX0 = (translateX / scaleX) - range;
+        double valueY0 = 0;
+        double valueX = valueX0;
+        double valueY;
 
-        range = (100.0f / zX) * (graphWidth / 200.0f);
-        X0 = (pX / zX) - range;
-        Y0 = 0;
-        X = X0;
+        while (valueX <= (translateX / scaleX) + range) {
+            // výpočet funkční hodnoty z aktuální hodnoty X
+            valueY = evaluator.evaluate(valueX);
 
-        while (X <= (pX / zX) + range) {
-            Y = expression.evaluate(X);
-
-            int a0, b0, a1, b1;
-
-            if (X == X0 || oy - Y * zY <= min || oy - Y * zY >= max
-                    || oy + X * zX <= min || oy + X * zX >= max
-                    || oy - Y0 * zY <= min || oy - Y0 * zY >= max
-                    || oy + X0 * zX <= min || oy + X0 * zX >= max
-                    || Double.isInfinite(Y) || Double.isNaN(Y)) {
-                X0 = X;
-                Y0 = Y;
+            if (valueX == valueX0 || Double.isInfinite(valueY) || Double.isNaN(valueY)
+                        || exceedsGraphLimits(originY - valueY * scaleY)
+                        || exceedsGraphLimits(originY + valueX * scaleX)
+                        || exceedsGraphLimits(originY - valueY0 * scaleY)
+                        || exceedsGraphLimits(originY + valueX0 * scaleX)) {
+                // nastavení průhledné barvy spojnice pro nezobrazení v případě neplatné hodnoty
+                paint.setColor(Color.TRANSPARENT);
             }
             else {
-                a0 = (int) ((ox + X0 * zX));
-                b0 = (int) ((oy - Y0 * zY));
-                a1 = (int) ((ox + X * zX));
-                b1 = (int) ((oy - Y * zY));
-
-                if (!(Math.abs(Y - Y0) >= 1000 / zY && Math.min(Y0, Y) < 0 && Math
-                        .max(Y0, Y) > 0)) {
-                    canvas.drawLine(a0, b0, a1, b1, paint);
-                }
-
-                X0 = X;
-                Y0 = Y;
+                // nastavení viditelné barvy spojnice pro zobrazení v případě platné hodnoty
+                paint.setColor(Color.BLACK);
             }
 
-            X += (1.0 / zX);
+            if (canDrawPlotLine(valueY0, valueY)) {
+                // nakreslení spojnice mezi aktuálně vypočtenými 2 body funkce
+                canvas.drawLine(
+                        (float) (originX + valueX0 * scaleX),
+                        (float) (originY - valueY0 * scaleY),
+                        (float) (originX + valueX * scaleX),
+                        (float) (originY - valueY * scaleY),
+                        paint);
+            }
+
+            // nastavení aktuálního koncového bodu spojnice jako nového počátečního
+            valueX0 = valueX;
+            valueY0 = valueY;
+
+            // přesun na další souřadnici X koncového bodu nové spojnice podle aktuálního měřítka
+            valueX += (1.0 / scaleX);
         }
+    }
+
+    private boolean exceedsGraphLimits(double value) {
+        return value <= GRAPH_MIN_VALUE || value >= GRAPH_MAX_VALUE;
+    }
+
+    private boolean canDrawPlotLine(double valueY0, double valueY) {
+        return !(Math.abs(valueY - valueY0) >= 1000 / scaleY
+                && Math.min(valueY0, valueY) < 0
+                && Math.max(valueY0, valueY) > 0);
     }
 
 }

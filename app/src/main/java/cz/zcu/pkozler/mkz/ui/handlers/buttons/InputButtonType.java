@@ -121,7 +121,7 @@ public enum InputButtonType {
     public final Boolean HAS_VARIABLE;
     private String text;
     private View.OnClickListener listener;
-    
+
     InputButtonType(int row, int col, InputMode inputMode,
             FunctionInputMode functionInputMode, AngleMode angleMode, Boolean hasVariable) {
         ROW = row;

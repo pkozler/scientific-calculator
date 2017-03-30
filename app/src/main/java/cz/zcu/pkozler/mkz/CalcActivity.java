@@ -8,10 +8,13 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import cz.zcu.pkozler.mkz.core.ExpressionException;
+import cz.zcu.pkozler.mkz.core.EvaluatorException;
 import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
-import cz.zcu.pkozler.mkz.ui.CalculatorContext;
 
+/**
+ *
+ * @author Petr Kozler
+ */
 public class CalcActivity extends BaseActivity {
 
     private EditText inputText;
@@ -34,12 +37,12 @@ public class CalcActivity extends BaseActivity {
             String inputStr = inputText.getText().toString();
 
             try {
-                getCalculatorContext().getExpression().parse(inputStr);
-                double outputVal = getCalculatorContext().getExpression().evaluate(null);
+                getCalculatorContext().getEvaluator().parse(inputStr);
+                double outputVal = getCalculatorContext().getEvaluator().evaluate(null);
 
                 outputTextView.setText(" = " + outputVal);
             }
-            catch (ExpressionException e) {
+            catch (EvaluatorException e) {
                 outputTextView.setText(errorMessages.get(e.CODE));
             }
         }

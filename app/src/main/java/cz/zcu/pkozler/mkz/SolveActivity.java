@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
-import cz.zcu.pkozler.mkz.ui.CalculatorContext;
 import cz.zcu.pkozler.mkz.support.EquationSolver;
 
+/**
+ *
+ * @author Petr Kozler
+ */
 public class SolveActivity extends BaseActivity {
 
     private EditText leftInputText;
@@ -158,7 +161,7 @@ public class SolveActivity extends BaseActivity {
             return;
         }
 
-        EquationSolver equationSolver = new EquationSolver(getCalculatorContext().getExpression(),
+        EquationSolver equationSolver = new EquationSolver(getCalculatorContext().getEvaluator(),
                 list, adapter, outputTextView, errorMessages);
         equationSolver.solve(left, right, lowerBoundary, upperBoundary, stepCount);
     }

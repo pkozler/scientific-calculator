@@ -2,9 +2,9 @@ package cz.zcu.pkozler.mkz.ui.handlers.buttons;
 
 import android.view.View;
 
-import cz.zcu.pkozler.mkz.core.tokens.types.ConstantType;
-import cz.zcu.pkozler.mkz.core.tokens.types.FunctionType;
-import cz.zcu.pkozler.mkz.core.tokens.types.OperatorType;
+import cz.zcu.pkozler.mkz.core.tokens.types.ConstantTokenType;
+import cz.zcu.pkozler.mkz.core.tokens.types.FunctionTokenType;
+import cz.zcu.pkozler.mkz.core.tokens.types.OperatorTokenType;
 import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
 import cz.zcu.pkozler.mkz.ui.handlers.ButtonGridLayoutHandler;
 import cz.zcu.pkozler.mkz.ui.modes.AngleMode;
@@ -162,56 +162,56 @@ public class InputButtonTypeInitializer {
         InputButtonType.setAdditionalProperties(InputButtonType.O_ADD_BTN, "+", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addOperator(OperatorType.ADD.KEYWORD);
+                activeEditTextHandler.addOperator(OperatorTokenType.ADD.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.O_SUB_BTN, "\u2212", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addOperator(OperatorType.SUB.KEYWORD);
+                activeEditTextHandler.addOperator(OperatorTokenType.SUB.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.O_MUL_BTN, "\u00D7", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addOperator(OperatorType.MUL.KEYWORD);
+                activeEditTextHandler.addOperator(OperatorTokenType.MUL.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.O_DIV_BTN, "\u00F7", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addOperator(OperatorType.DIV.KEYWORD);
+                activeEditTextHandler.addOperator(OperatorTokenType.DIV.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.O_POW_BTN, "^", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addOperator(OperatorType.POW.KEYWORD);
+                activeEditTextHandler.addOperator(OperatorTokenType.POW.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.O_MOD_BTN, "mod", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addOperator(OperatorType.MOD.KEYWORD);
+                activeEditTextHandler.addOperator(OperatorTokenType.MOD.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.C_EU_BTN, "e", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addConstant(ConstantType.E.KEYWORD);
+                activeEditTextHandler.addConstant(ConstantTokenType.E.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.C_PI_BTN, "\u03C0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addConstant(ConstantType.PI.KEYWORD);
+                activeEditTextHandler.addConstant(ConstantTokenType.PI.KEYWORD);
             }
         });
 
@@ -246,301 +246,301 @@ public class InputButtonTypeInitializer {
         InputButtonType.setAdditionalProperties(InputButtonType.F_SQ_BTN, "x\u00B2", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SQ.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SQ.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_SQRT_BTN, "\u221Ax", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SQRT.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SQRT.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_CB_BTN, "x\u00B3", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.CB.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.CB.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_CBRT_BTN, "\u221Bx", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.CBRT.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.CBRT.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_POW_BTN, "x\u02B8", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.POW.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.POW.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_YROOT_BTN, "\u02B8\u221Ax", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.YROOT.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.YROOT.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_EXP_BTN, "e^x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.EXP.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.EXP.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_LN_BTN, "ln x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.LN.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.LN.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_LOG_BTN, "log\u2090 x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.LOG.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.LOG.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_REC_BTN, "x\u207B\u00B9", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.REC.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.REC.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ABS_BTN, "|x|", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ABS.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ABS.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_INT_BTN, "[x]", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.INT.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.INT.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_FRAC_BTN, "x\u2212[x]", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.FRAC.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.FRAC.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_FLOOR_BTN, "\u230Ax\u230B", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.FLOOR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.FLOOR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_CEIL_BTN, "\u2308x\u2309", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.CEIL.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.CEIL.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_SGN_BTN, "sgn x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SGN.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SGN.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_SIND_BTN, "sin x\u00B0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SIND.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SIND.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_COSD_BTN, "cos x\u00B0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.COSD.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.COSD.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_TAND_BTN, "tan x\u00B0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.TAND.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.TAND.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ASIND_BTN, "asin x\u00B0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ASIND.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ASIND.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ACOSD_BTN, "acos x\u00B0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ACOSD.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ACOSD.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ATAND_BTN, "atan x\u00B0", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ATAND.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ATAND.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_SINR_BTN, "sin x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SINR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SINR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_COSR_BTN, "cos x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.COSR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.COSR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_TANR_BTN, "tan x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.TANR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.TANR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ASINR_BTN, "asin x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ASINR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ASINR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ACOSR_BTN, "acos x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ACOSR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ACOSR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ATANR_BTN, "atan x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ATANR.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ATANR.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_SING_BTN, "sin x\u1D4D", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SING.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SING.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_COSG_BTN, "cos x\u1D4D", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.COSG.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.COSG.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_TANG_BTN, "tan x\u1D4D", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.TANG.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.TANG.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ASING_BTN, "asin x\u1D4D", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ASING.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ASING.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ACOSG_BTN, "acos x\u1D4D", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ACOSG.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ACOSG.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ATANG_BTN, "atan x\u1D4D", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ATANG.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ATANG.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_SINH_BTN, "sinh x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.SINH.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.SINH.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_COSH_BTN, "cosh x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.COSH.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.COSH.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_TANH_BTN, "tanh x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.TANH.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.TANH.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ASINH_BTN, "asinh x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ASINH.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ASINH.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ACOSH_BTN, "acosh x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ACOSH.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ACOSH.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_ATANH_BTN, "atanh x", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.ATANH.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.ATANH.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_DMS_BTN, "dms", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.DMS.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.DMS.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_DEG_BTN, "deg", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.DEG.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.DEG.KEYWORD);
             }
         });
 
         InputButtonType.setAdditionalProperties(InputButtonType.F_FACT_BTN, "n!", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeEditTextHandler.addFunction(FunctionType.FACT.KEYWORD);
+                activeEditTextHandler.addFunction(FunctionTokenType.FACT.KEYWORD);
             }
         });
     }

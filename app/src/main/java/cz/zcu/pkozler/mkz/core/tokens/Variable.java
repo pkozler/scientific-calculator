@@ -1,18 +1,18 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
 /**
- * Třída představující proměnné v matematickém výrazu, které uchovávají
- * informaci o svém indexu, na základě níž dojde při vyhodnocování výrazu k
- * dosazení příslušné zadané číselné hodnoty.
+ * Třída představující symboly proměnné v matematickém výrazu,
+ * za které je dosazena zadaná číselná hodnota v průběhu vyhodnocování tohoto výrazu.
  *
  * @author Petr Kozler
  */
 public class Variable extends Token {
 
-    /// <summary>
-    /// Vytvoří novou proměnnou.
-    /// </summary>
-    /// <param name="str">textová reprezentace</param>
+    /**
+     * Vytvoří nový symbol proměnné.
+     * 
+     * @param str textová reprezentace
+     **/
     public Variable(String str) {
         super(str);
     }

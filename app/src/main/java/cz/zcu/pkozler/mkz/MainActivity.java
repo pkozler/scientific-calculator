@@ -3,6 +3,10 @@ package cz.zcu.pkozler.mkz;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+/**
+ *
+ * @author Petr Kozler
+ */
 public class MainActivity extends BaseActivity {
 
     public MainActivity() {

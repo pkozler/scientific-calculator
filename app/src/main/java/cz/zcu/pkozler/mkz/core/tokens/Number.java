@@ -1,6 +1,7 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
-import cz.zcu.pkozler.mkz.core.tokens.types.ConstantType;
+import cz.zcu.pkozler.mkz.core.helpers.TokenParsing;
+import cz.zcu.pkozler.mkz.core.tokens.types.ConstantTokenType;
 
 /**
  * Třída představující hodnoty (čísla) v matematickém výrazu, které lze vytvořit
@@ -11,34 +12,36 @@ import cz.zcu.pkozler.mkz.core.tokens.types.ConstantType;
  */
 public class Number extends Token {
 
-    /// <summary>
-    /// číselná hodnota
-    /// </summary>
+    /**
+     * číselná hodnota
+     **/
     public final double VALUE;
 
-    /// <summary>
-    /// Vytvoří nové číslo podle jeho textové reprezentace.
-    /// </summary>
-    /// <param name="str">textová reprezentace</param>
+    /**
+     * Vytvoří nové číslo podle jeho textové reprezentace.
+     * 
+     * @param str textová reprezentace
+     **/
     public Number(String str) {
         super(str);
 
-        if (ConstantType.PI.KEYWORD.equals(str)) {
+        if (ConstantTokenType.PI.stringEquals(str)) {
             VALUE = Math.PI;
-        } else if (ConstantType.E.KEYWORD.equals(str)) {
+        } else if (ConstantTokenType.E.stringEquals(str)) {
             VALUE = Math.E;
         } else {
             // přeznačení záporných čísel zpět na znaménko "-" po zpracování
             VALUE = Double.parseDouble(
-                    str.charAt(0) == '_' ? ("-" + str.substring(1)) : str);
+                    TokenParsing.AUX_SIGN_SYMBOL == str.charAt(0) ? (TokenParsing.DEF_SIGN_SYMBOL + str.substring(1)) : str);
         }
     }
 
-    /// <summary>
-    /// Vrátí nové číslo vytvořené na základě zadané hodnoty.
-    /// </summary>
-    /// <param name="value">číselná hodnota</param>
-    /// <returns>číslo</returns>
+    /**
+     * Vrátí nové číslo se zadanou hodnotou a uloženou textovou reprezentací.
+     * 
+     * @param value číselná hodnota
+     * @return číslo
+     **/
     public static Number createNumber(double value) {
         return new Number(Double.toString(value));
     }

@@ -1,6 +1,6 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
-import cz.zcu.pkozler.mkz.core.tokens.types.OperatorType;
+import cz.zcu.pkozler.mkz.core.tokens.types.OperatorTokenType;
 
 /**
  * Třída představující operátory v matematickém výrazu.
@@ -9,33 +9,34 @@ import cz.zcu.pkozler.mkz.core.tokens.types.OperatorType;
  */
 public class Operator extends Token {
 
-    /// <summary>
-    /// informace o asociativitě operátoru
-    /// </summary>
+    /**
+     * informace o asociativitě operátoru
+     **/
     private final boolean LEFT_ASSOC;
 
-    /// <summary>
-    /// informace o prioritě operátoru
-    /// </summary>
+    /**
+     * informace o prioritě operátoru
+     **/
     public final int PRECEDENCE;
 
-    /// <summary>
-    /// Vytvoří nový operátor a nastaví mu příslušnou asociativitu a prioritu.
-    /// </summary>
-    /// <param name="str">textová reprezentace</param>
+    /**
+     * Vytvoří nový operátor a nastaví mu příslušnou asociativitu a prioritu.
+     * 
+     * @param str textová reprezentace
+     **/
     public Operator(String str) {
         super(str);
 
-        if (OperatorType.ADD.KEYWORD.equals(str)
-                || OperatorType.SUB.KEYWORD.equals(str)) {
+        if (OperatorTokenType.ADD.stringEquals(str)
+                || OperatorTokenType.SUB.stringEquals(str)) {
             LEFT_ASSOC = true;
             PRECEDENCE = 1;
-        } else if (OperatorType.MUL.KEYWORD.equals(str)
-                || OperatorType.DIV.KEYWORD.equals(str)
-                || OperatorType.MOD.KEYWORD.equals(str)) {
+        } else if (OperatorTokenType.MUL.stringEquals(str)
+                || OperatorTokenType.DIV.stringEquals(str)
+                || OperatorTokenType.MOD.stringEquals(str)) {
             LEFT_ASSOC = true;
             PRECEDENCE = 2;
-        } else if (OperatorType.POW.KEYWORD.equals(str)) {
+        } else if (OperatorTokenType.POW.stringEquals(str)) {
             LEFT_ASSOC = false;
             PRECEDENCE = 3;
         } else {
@@ -44,50 +45,53 @@ public class Operator extends Token {
         }
     }
 
-    /// <summary>
-    /// Určí, zda je operátor asociativní zleva.
-    /// </summary>
-    /// <returns>TRUE, pokud je token asociativní zleva, jinak FALSE</returns>
+    /**
+     * Určí, zda je operátor asociativní zleva.
+     * 
+     * @return TRUE, pokud je token asociativní zleva, jinak FALSE
+     **/
     public boolean isLeftAssoc() {
         return LEFT_ASSOC;
     }
 
-    /// <summary>
-    /// Určí, zda je operátor asociativní zprava.
-    /// </summary>
-    /// <returns>TRUE, pokud je token asociativní zprava, jinak FALSE</returns>
+    /**
+     * Určí, zda je operátor asociativní zprava.
+     * 
+     * @return TRUE, pokud je token asociativní zprava, jinak FALSE
+     **/
     public boolean isRightAssoc() {
         return !LEFT_ASSOC;
     }
 
-    /// <summary>
-    /// Provede příslušný výpočet nad předanými operandy a vrátí nové číslo představující výsledek.
-    /// </summary>
-    /// <param name="a">levý operand</param>
-    /// <param name="b">pravý operand</param>
-    /// <returns>výsledek výpočtu</returns>
+    /**
+     * Provede příslušný výpočet nad předanými operandy a vrátí nové číslo představující výsledek.
+     * 
+     * @param a levý operand
+     * @param b pravý operand
+     * @return výsledek výpočtu
+     **/
     public Number calc(Number a, Number b) {
-        if (OperatorType.ADD.KEYWORD.equals(str)) {
+        if (OperatorTokenType.ADD.stringEquals(str)) {
             return Number.createNumber(a.VALUE + b.VALUE);
         }
 
-        if (OperatorType.SUB.KEYWORD.equals(str)) {
+        if (OperatorTokenType.SUB.stringEquals(str)) {
             return Number.createNumber(a.VALUE - b.VALUE);
         }
 
-        if (OperatorType.MUL.KEYWORD.equals(str)) {
+        if (OperatorTokenType.MUL.stringEquals(str)) {
             return Number.createNumber(a.VALUE * b.VALUE);
         }
 
-        if (OperatorType.DIV.KEYWORD.equals(str)) {
+        if (OperatorTokenType.DIV.stringEquals(str)) {
             return Number.createNumber(a.VALUE / b.VALUE);
         }
 
-        if (OperatorType.POW.KEYWORD.equals(str)) {
+        if (OperatorTokenType.POW.stringEquals(str)) {
             return Number.createNumber(Math.pow(a.VALUE, b.VALUE));
         }
 
-        if (OperatorType.MOD.KEYWORD.equals(str)) {
+        if (OperatorTokenType.MOD.stringEquals(str)) {
             return Number.createNumber(a.VALUE % b.VALUE);
         }
 

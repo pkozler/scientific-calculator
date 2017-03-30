@@ -10,13 +10,17 @@ import android.widget.EditText;
 
 import java.util.HashMap;
 
-import cz.zcu.pkozler.mkz.core.ExpressionExceptionCode;
+import cz.zcu.pkozler.mkz.core.EvaluatorExceptionCode;
 import cz.zcu.pkozler.mkz.ui.CalculatorContext;
 import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
 
+/**
+ *
+ * @author Petr Kozler
+ */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected HashMap<ExpressionExceptionCode, String> errorMessages;
+    protected HashMap<EvaluatorExceptionCode, String> errorMessages;
     private final boolean SHOW_MENU;
 
     public BaseActivity(boolean showMenu) {
@@ -74,6 +78,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     protected CalculatorContext getCalculatorContext() {
         return (CalculatorContext)getApplication();
     }
@@ -91,28 +105,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     protected void createErrorMessages() {
         errorMessages = new HashMap<>();
         errorMessages.put(null, "");
-        errorMessages.put(ExpressionExceptionCode.INVALID_SYMBOLS, getString(R.string.error_invalid_symbols));
-        errorMessages.put(ExpressionExceptionCode.MISPLACED_ARG_SEPARATOR, getString(R.string.error_misplaced_arg_separator));
-        errorMessages.put(ExpressionExceptionCode.MISSING_LEFT_PARENTHESES, getString(R.string.error_missing_left_parentheses));
-        errorMessages.put(ExpressionExceptionCode.MISSING_RIGHT_PARENTHESES, getString(R.string.error_missing_right_parentheses));
-        errorMessages.put(ExpressionExceptionCode.MISSING_OPERANDS, getString(R.string.error_missing_operands));
-        errorMessages.put(ExpressionExceptionCode.MISSING_ARGS, getString(R.string.error_missing_args));
-        errorMessages.put(ExpressionExceptionCode.TOO_MANY_VALUES, getString(R.string.error_too_many_values));
-        errorMessages.put(ExpressionExceptionCode.ILLEGAL_VAR_SYMBOL, getString(R.string.error_illegal_var_symbol));
-        errorMessages.put(ExpressionExceptionCode.NOT_INT_FACTORIAL_ARG, getString(R.string.error_not_int_factorial_arg));
+        errorMessages.put(EvaluatorExceptionCode.EMPTY_TOKEN, getString(R.string.error_empty_token));
+        errorMessages.put(EvaluatorExceptionCode.INVALID_SYMBOLS, getString(R.string.error_invalid_symbols));
+        errorMessages.put(EvaluatorExceptionCode.MISPLACED_ARG_SEPARATOR, getString(R.string.error_misplaced_arg_separator));
+        errorMessages.put(EvaluatorExceptionCode.MISSING_LEFT_PARENTHESES, getString(R.string.error_missing_left_parentheses));
+        errorMessages.put(EvaluatorExceptionCode.MISSING_RIGHT_PARENTHESES, getString(R.string.error_missing_right_parentheses));
+        errorMessages.put(EvaluatorExceptionCode.MISSING_OPERANDS, getString(R.string.error_missing_operands));
+        errorMessages.put(EvaluatorExceptionCode.MISSING_ARGS, getString(R.string.error_missing_args));
+        errorMessages.put(EvaluatorExceptionCode.TOO_MANY_VALUES, getString(R.string.error_too_many_values));
+        errorMessages.put(EvaluatorExceptionCode.WRONG_VAR_SYMBOL, getString(R.string.error_wrong_var_symbol));
+        errorMessages.put(EvaluatorExceptionCode.ILLEGAL_FACTORIAL_ARG, getString(R.string.error_illegal_factorial_arg));
     }
 
 }

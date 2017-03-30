@@ -28,14 +28,16 @@
     <string name="solve_empty_output_lower_boundary">Zadejte dolní mez</string>
     <string name="solve_empty_output_upper_boundary">Zadejte horní mez</string>
     <string name="solve_empty_output_step_count">Zadejte počet kroků</string>
+    <string name="error_empty_token">Token výrazu nemůže mít prázdnou textovou reprezentaci.</string>
     <string name="error_invalid_symbols">Zadaný výraz obsahuje neplatné symboly.</string>
     <string name="error_misplaced_arg_separator">Oddělovač argumentů funkce je na nesprávném místě nebo chybí otevírací závorka.</string>
     <string name="error_missing_left_parentheses">Ve výrazu se nacházejí neotevřené závorky.</string>
     <string name="error_missing_right_parentheses">Ve výrazu se nacházejí neuzavřené závorky.</string>
-    <string name="error_illegal_var_symbol">Neplatný symbol proměnné ve výpočtu.</string>
+    <string name="error_wrong_var_symbol">Neplatný symbol proměnné ve výpočtu.</string>
     <string name="error_missing_operands">Nebyl zadán dostatečný počet operandů.</string>
     <string name="error_missing_args">Nebyl zadán dostatečný počet argumentů funkce.</string>
     <string name="error_too_many_values">Byl zadán přebytečný počet hodnot.</string>
-    <string name="error_not_int_factorial_arg">Parametry funkce faktoriál musí být celá čísla.</string>
+    <string name="error_illegal_factorial_arg">Parametry funkce faktoriál musí být přirozená čísla.</string>
+
 
 </resources>
