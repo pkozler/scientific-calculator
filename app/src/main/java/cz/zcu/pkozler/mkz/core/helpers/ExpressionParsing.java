@@ -1,10 +1,12 @@
 package cz.zcu.pkozler.mkz.core.helpers;
 
+import cz.zcu.pkozler.mkz.core.tokens.TokenConfig;
 import cz.zcu.pkozler.mkz.core.tokens.types.ConstantTokenType;
 import cz.zcu.pkozler.mkz.core.tokens.types.FunctionTokenType;
 import cz.zcu.pkozler.mkz.core.tokens.types.ITokenType;
 import cz.zcu.pkozler.mkz.core.tokens.types.OperatorTokenType;
 import cz.zcu.pkozler.mkz.core.tokens.types.OtherTokenType;
+import cz.zcu.pkozler.mkz.core.tokens.types.VariableType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
  *
  * @author Petr Kozler
  */
-public final class TokenParsing {
+public final class ExpressionParsing {
     /**
      * regulární výraz popisující proměnné na začátku aktuálního podřetězce
      **/
@@ -55,21 +57,6 @@ public final class TokenParsing {
     public static final Map<String, String> TRANSCRIPTIONS = new HashMap<>();
 
     /**
-     * symbol proměnné v matematickém výrazu
-     */
-    public static final String VARIABLE_KEYWORD = "x";
-
-    /**
-     * standardní symbol záporného znaménka číselné hodnoty
-     */
-    public static final char DEF_SIGN_SYMBOL = '-';
-
-    /**
-     * zástupný symbol záporného znaménka pro odlišení od operátoru odčítání během zpracování výrazu
-     */
-    public static final char AUX_SIGN_SYMBOL = '_';
-
-    /**
      * Spojí výčet textových reprezentací tokenů jednoho daného typu do řetězce představujícího
      * regulární výraz použitý k identifikaci typu tokenu v řetězcové reprezentaci
      * matematického výrazu ve fázi zpracování.
@@ -101,8 +88,8 @@ public final class TokenParsing {
         String other = joinTokensToRegex(OtherTokenType.values());
 
         // kompilace regulárních výrazů ze sestavených textových reprezentací
-        VARIABLE_REGEX = Pattern.compile("^x");
-        NUMBER_REGEX = Pattern.compile("^(_?[0-9]*\\.?[0-9]+(e[-+]?[0-9]+)?)");
+        NUMBER_REGEX = Pattern.compile("^(" + Character.toString(TokenConfig.AUX_SIGN_SYMBOL) + "?" + TokenConfig.DIGITS_STRING + "*\\.?\" + DIGITS_STRING + \"+(e[-+]?\" + DIGITS_STRING + \"+)?)");
+        VARIABLE_REGEX = Pattern.compile("^" + VariableType.VARIABLE.toString());
         OPERATOR_REGEX = Pattern.compile("^(" + operators + ")");
         FUNCTION_REGEX = Pattern.compile("^(" + functions + ")");
         CONSTANT_REGEX = Pattern.compile("^(" + constants + ")");
@@ -111,19 +98,19 @@ public final class TokenParsing {
         // odstranění bílých znaků z výrazu
         TRANSCRIPTIONS.put("\\s+", "");
         // doplnění operace "1*" před proměnnou, konstantu, funkci nebo levou závorku se záporným znaménkem zleva
-        TRANSCRIPTIONS.put("(-)(\\(|\" + VARIABLE_KEYWORD + \"|" + constants + "|" + functions + ")", "-1*$2");
+        TRANSCRIPTIONS.put("(-)(\\(|" + VariableType.VARIABLE.toString() + "|" + constants + "|" + functions + ")", "-1*$2");
         // doplnění znaku násobení "*" za čísla s bezprostředně následující proměnnou, konstantou, funkcí nebo levou závorkou
-        TRANSCRIPTIONS.put("([0-9])(\\(|" + VARIABLE_KEYWORD + "|" + constants + "|" + functions + ")", "$1*$2");
+        TRANSCRIPTIONS.put("(" + TokenConfig.DIGITS_STRING + ")(\\(|" + VariableType.VARIABLE.toString() + "|" + constants + "|" + functions + ")", "$1*$2");
         // doplnění znaku násobení "*" za konstanty nebo pravé závorky s bezprostředně následující proměnnou, číslem, konstantou, funkcí nebo levou závorkou
-        TRANSCRIPTIONS.put("(\\)|" + constants + ")(\\(|[0-9]|" + VARIABLE_KEYWORD + "|" + constants + "|" + functions + ")", "$1*$2");
+        TRANSCRIPTIONS.put("(\\)|" + constants + ")(\\(|" + TokenConfig.DIGITS_STRING + "|" + VariableType.VARIABLE.toString() + "|" + constants + "|" + functions + ")", "$1*$2");
         // odstranění přebytečných kladných znamének na začátku výrazu
         TRANSCRIPTIONS.put("^(" + OperatorTokenType.ADD.toRegexString() + ")", "");
         // odstranění přebytečných kladných znamének uvnitř výrazu
         TRANSCRIPTIONS.put(OtherTokenType.LEFT_PARENTHESIS.toRegexString() + OperatorTokenType.ADD.toRegexString(), OtherTokenType.LEFT_PARENTHESIS.toString());
         // přeznačení záporných znamének na začátku výrazu
-        TRANSCRIPTIONS.put("^(" + OperatorTokenType.SUB.toRegexString() + ")", "" + AUX_SIGN_SYMBOL);
+        TRANSCRIPTIONS.put("^(" + OperatorTokenType.SUB.toRegexString() + ")", "" + TokenConfig.AUX_SIGN_SYMBOL);
         // přeznačení záporných znamének uvnitř výrazu
-        TRANSCRIPTIONS.put(OtherTokenType.LEFT_PARENTHESIS.toRegexString() + OperatorTokenType.SUB.toRegexString(), OtherTokenType.LEFT_PARENTHESIS.toString() + AUX_SIGN_SYMBOL);
+        TRANSCRIPTIONS.put(OtherTokenType.LEFT_PARENTHESIS.toRegexString() + OperatorTokenType.SUB.toRegexString(), OtherTokenType.LEFT_PARENTHESIS.toString() + TokenConfig.AUX_SIGN_SYMBOL);
     }
 
 }

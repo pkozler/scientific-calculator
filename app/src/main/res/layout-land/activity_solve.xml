@@ -184,7 +184,7 @@
                     android:id="@+id/solveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="findSolution"
+                    android:onClick="startSolving"
                     android:text="@string/solve_button" />
 
                 <TextView

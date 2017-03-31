@@ -1,6 +1,6 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
-import cz.zcu.pkozler.mkz.core.helpers.TokenParsing;
+import cz.zcu.pkozler.mkz.core.helpers.ExpressionParsing;
 import cz.zcu.pkozler.mkz.core.tokens.types.ConstantTokenType;
 
 /**
@@ -32,7 +32,7 @@ public class Number extends Token {
         } else {
             // přeznačení záporných čísel zpět na znaménko "-" po zpracování
             VALUE = Double.parseDouble(
-                    TokenParsing.AUX_SIGN_SYMBOL == str.charAt(0) ? (TokenParsing.DEF_SIGN_SYMBOL + str.substring(1)) : str);
+                    ExpressionParsing.AUX_SIGN_SYMBOL == str.charAt(0) ? (ExpressionParsing.DEF_SIGN_SYMBOL + str.substring(1)) : str);
         }
     }
 

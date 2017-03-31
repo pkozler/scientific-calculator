@@ -1,4 +1,4 @@
-package cz.zcu.pkozler.mkz.ui.handlers.buttons;
+package cz.zcu.pkozler.mkz.ui.buttons;
 
 import android.view.View;
 
@@ -7,6 +7,13 @@ import cz.zcu.pkozler.mkz.ui.modes.FunctionInputMode;
 import cz.zcu.pkozler.mkz.ui.modes.InputMode;
 
 /**
+ * Výčtový typ reprezentující jednotlivá tlačítka na klávesnici kalkulačky, která slouží
+ * pro zadávání vstupu do zvoleného textového pole aktuálně zobrazené aktivity, a pro která
+ * jsou uchovávány všechny potřebné informace, jako pozice na klávesnici, popisek, režim
+ * kalkulačky, ve kterém jsou zobrazena, a referenci na objekt posluchače stisku tlačítka.
+ * Data pro všechna tlačítka jsou inicializována a uložena najednou po spuštění aplikace,
+ * díky čemuž není nutné je při přepnutí režimu kalkulačky inicializovat znova, pouze jsou
+ * vystřídána tlačítka na odpovídajících pozicích.
  *
  * @author Petr Kozler
  */
@@ -110,18 +117,67 @@ public enum InputButtonType {
     
     O_ADD_BTN(5, 3, InputMode.DIGIT_OPERATOR_MODE, null, null, null),
     F_SGN_BTN(5, 3, InputMode.FUNCTION_MODE, FunctionInputMode.FUNCTION_MODE_1, null, null);
-    
+
+    /**
+     * počet řádek klávesnice s tlačítky
+     */
     public static final int BTN_GRID_ROW_COUNT = 6;
+
+    /**
+     * počet sloupců klávesnice s tlačítky
+     */
     public static final int BTN_GRID_COL_COUNT = 4;
+
+    /**
+     * index řádky klávesnice, na které je tlačítko umístěno
+     */
     public final int ROW;
+
+    /**
+     * index sloupce klávesnice, ve kterém je tlačítko umístěno
+     */
     public final int COL;
+
+    /**
+     * základní režim kalkulačky, při kterém je tlačítko zobrazeno
+     */
     public final InputMode INPUT_MODE;
+
+    /**
+     * režim matematických funkcí, při kterém je tlačítko zobrazeno
+     */
     public final FunctionInputMode FUNCTION_INPUT_MODE;
+
+    /**
+     * režim úhlových jednotek, při kterém je tlačítko zobrazeno
+     */
     public final AngleMode ANGLE_MODE;
+
+    /**
+     * příznak zobrazení tlačítka v aktivitě pro práci s výrazy, které obsahují proměnné
+     */
     public final Boolean HAS_VARIABLE;
+
+    /**
+     * popis tlačítka
+     */
     private String text;
+
+    /**
+     * posluchač události stisku tlačítka
+     */
     private View.OnClickListener listener;
 
+    /**
+     * Vytvoří nový typ tlačítka s inicializací základních informací potřebných pro jeho vytvoření.
+     *
+     * @param row index řádky klávesnice, na které je tlačítko umístěno
+     * @param col index sloupce klávesnice, ve kterém je tlačítko umístěno
+     * @param inputMode základní režim kalkulačky, při kterém je tlačítko zobrazeno
+     * @param functionInputMode režim matematických funkcí, při kterém je tlačítko zobrazeno
+     * @param angleMode režim úhlových jednotek, při kterém je tlačítko zobrazeno
+     * @param hasVariable příznak zobrazení tlačítka v aktivitě pro práci s výrazy, které obsahují proměnné
+     */
     InputButtonType(int row, int col, InputMode inputMode,
             FunctionInputMode functionInputMode, AngleMode angleMode, Boolean hasVariable) {
         ROW = row;
@@ -132,15 +188,31 @@ public enum InputButtonType {
         HAS_VARIABLE = hasVariable;
     }
 
-    public static void setAdditionalProperties(InputButtonType type, String text, View.OnClickListener listener) {
-        type.text = text;
-        type.listener = listener;
+    /**
+     * Nastaví danému typu tlačítka dodatečné informace potřebné pro zobrazení a správnou funkci tlačítka.
+     *
+     * @param text popis tlačítka
+     * @param listener posluchač události stisku tlačítka
+     */
+    public void setAdditionalProperties(String text, View.OnClickListener listener) {
+        this.text = text;
+        this.listener = listener;
     }
 
+    /**
+     * Vrátí popis tlačítka.
+     *
+     * @return popis tlačítka
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Vrátí posluchač události stisku tlačítka.
+     *
+     * @return posluchač události stisku tlačítka
+     */
     public View.OnClickListener getListener() {
         return listener;
     }

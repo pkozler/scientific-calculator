@@ -1,6 +1,6 @@
 package cz.zcu.pkozler.mkz.core;
 
-import cz.zcu.pkozler.mkz.core.helpers.TokenParsing;
+import cz.zcu.pkozler.mkz.core.helpers.ExpressionParsing;
 import cz.zcu.pkozler.mkz.core.tokens.Function;
 import cz.zcu.pkozler.mkz.core.tokens.Token;
 import cz.zcu.pkozler.mkz.core.tokens.Number;
@@ -83,7 +83,7 @@ public class Evaluator {
         str = str.toLowerCase();
 
         // přeznačení podle předdefinovaných přepisovacích pravidel
-        for (Map.Entry<String, String> t : TokenParsing.TRANSCRIPTIONS.entrySet()) {
+        for (Map.Entry<String, String> t : ExpressionParsing.TRANSCRIPTIONS.entrySet()) {
             str = str.replaceAll(t.getKey(), t.getValue());
         }
 
@@ -109,27 +109,27 @@ public class Evaluator {
         // otestuje výskyt jednotlivých typů tokenů a vybere ten, který se nachází na počátku aktuálního podřetězce
         while (i < str.length()) {
             // test výskytu funkce
-            if ((matcher = TokenParsing.FUNCTION_REGEX.matcher(str.substring(i))).find()) {
+            if ((matcher = ExpressionParsing.FUNCTION_REGEX.matcher(str.substring(i))).find()) {
                 infix.add(new Function(matcher.group()));
             }
             // test výskytu operátoru
-            else if ((matcher = TokenParsing.OPERATOR_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = ExpressionParsing.OPERATOR_REGEX.matcher(str.substring(i))).find()) {
                 infix.add(new Operator(matcher.group()));
             }
             // test výskytu proměnné
-            else if ((matcher = TokenParsing.VARIABLE_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = ExpressionParsing.VARIABLE_REGEX.matcher(str.substring(i))).find()) {
                 infix.add(new Variable(matcher.group()));
             }
             // test výskytu čísla
-            else if ((matcher = TokenParsing.NUMBER_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = ExpressionParsing.NUMBER_REGEX.matcher(str.substring(i))).find()) {
                 infix.add(new Number(matcher.group()));
             }
             // test výskytu konstanty
-            else if ((matcher = TokenParsing.CONSTANT_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = ExpressionParsing.CONSTANT_REGEX.matcher(str.substring(i))).find()) {
                 infix.add(new Number(matcher.group()));
             }
             // test výskytu závorky
-            else if ((matcher = TokenParsing.OTHER_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = ExpressionParsing.OTHER_REGEX.matcher(str.substring(i))).find()) {
                 infix.add(new Token(matcher.group()));
             }
             // nenalezen platný token
