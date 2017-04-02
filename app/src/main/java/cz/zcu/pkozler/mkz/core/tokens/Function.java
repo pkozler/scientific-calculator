@@ -2,6 +2,7 @@ package cz.zcu.pkozler.mkz.core.tokens;
 
 import cz.zcu.pkozler.mkz.core.EvaluatorException;
 import cz.zcu.pkozler.mkz.core.helpers.AuxiliaryMath;
+import cz.zcu.pkozler.mkz.core.helpers.ExpressionConfig;
 import cz.zcu.pkozler.mkz.core.tokens.types.FunctionTokenType;
 
 /**
@@ -186,9 +187,9 @@ public class Function extends Token {
             return Number.createNumber(Math.ceil(args[0].VALUE));
         } else if (FunctionTokenType.FACT.stringEquals(str)) {
             if (args.length == 1) {
-                return Number.createNumber(AuxiliaryMath.factorial(args[0].VALUE));
+                return Number.createNumber(AuxiliaryMath.factorial(ExpressionConfig.MAX_FACT_ARG, args[0].VALUE));
             } else {
-                return Number.createNumber(AuxiliaryMath.factorial(args[1].VALUE, args[0].VALUE));
+                return Number.createNumber(AuxiliaryMath.factorial(ExpressionConfig.MAX_FACT_ARG, args[1].VALUE, args[0].VALUE));
             }
         } else if (FunctionTokenType.ABS.stringEquals(str)) {
             return Number.createNumber(Math.abs(args[0].VALUE));

@@ -14,33 +14,31 @@ import cz.zcu.pkozler.mkz.core.EvaluatorExceptionCode;
 public final class AuxiliaryMath {
 
     /**
-     * maximální povolená hodnota pro výpočet faktoriálu
-     **/
-    private static final double MAX_FACT_ARG = 1000;
-
-    /**
-     * Vypočítá 1. faktoriál ze zadané hodnoty.
+     * Vypočítá 1. faktoriál ze zadané hodnoty. Maximální hodnota argumentu je omezena
+     * z důvodu vysoké výpočetní náročnosti při větších hodnotách.
      *
+     * @param maxFactArg maximální hodnota argumentu
      * @param a argument
      * @return faktoriál
      * @throws EvaluatorException
      **/
-    public static double factorial(double a) throws EvaluatorException {
-        return AuxiliaryMath.factorial(a, 1);
+    public static double factorial(int maxFactArg, double a) throws EvaluatorException {
+        return AuxiliaryMath.factorial(maxFactArg, a, 1);
     }
 
     /**
      * Vypočítá k-tý multifaktoriál ze zadané hodnoty. Maximální hodnota argumentu je omezena
-     * z důvodu příliš vysoké výpočetní náročnosti při větších hodnotách.
+     * z důvodu vysoké výpočetní náročnosti při větších hodnotách.
      *
-     * @param a         argument
-     * @param b"stupeň" faktoriálu
+     * @param maxFactArg maximální hodnota argumentu
+     * @param a argument
+     * @param b "stupeň" faktoriálu
      * @return k-tý faktoriál
      * @throws EvaluatorException
      **/
-    public static double factorial(double a, double b) throws EvaluatorException {
-        if (a > MAX_FACT_ARG) {
-            a = MAX_FACT_ARG;
+    public static double factorial(int maxFactArg, double a, double b) throws EvaluatorException {
+        if (a > (double) maxFactArg) {
+            a = maxFactArg;
         }
 
         double nA = Math.abs(AuxiliaryMath.integer(a));

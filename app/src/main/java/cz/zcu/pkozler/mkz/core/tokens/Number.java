@@ -1,7 +1,8 @@
 package cz.zcu.pkozler.mkz.core.tokens;
 
-import cz.zcu.pkozler.mkz.core.helpers.ExpressionParsing;
+import cz.zcu.pkozler.mkz.core.helpers.ExpressionConfig;
 import cz.zcu.pkozler.mkz.core.tokens.types.ConstantTokenType;
+import cz.zcu.pkozler.mkz.core.tokens.types.OperatorTokenType;
 
 /**
  * Třída představující hodnoty (čísla) v matematickém výrazu, které lze vytvořit
@@ -32,7 +33,7 @@ public class Number extends Token {
         } else {
             // přeznačení záporných čísel zpět na znaménko "-" po zpracování
             VALUE = Double.parseDouble(
-                    ExpressionParsing.AUX_SIGN_SYMBOL == str.charAt(0) ? (ExpressionParsing.DEF_SIGN_SYMBOL + str.substring(1)) : str);
+                    ExpressionConfig.AUX_SIGN_SYMBOL == str.charAt(0) ? (OperatorTokenType.SUB.toString() + str.substring(1)) : str);
         }
     }
 

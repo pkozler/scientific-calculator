@@ -1,6 +1,6 @@
 package cz.zcu.pkozler.mkz.core;
 
-import cz.zcu.pkozler.mkz.core.helpers.ExpressionParsing;
+import cz.zcu.pkozler.mkz.core.tokens.TokenParsing;
 import cz.zcu.pkozler.mkz.core.tokens.Function;
 import cz.zcu.pkozler.mkz.core.tokens.Token;
 import cz.zcu.pkozler.mkz.core.tokens.Number;
@@ -25,6 +25,20 @@ public class Evaluator {
      * poslední zpracovaný výraz
      */
     private Queue<Token> postfix;
+
+    /**
+     * objekt pro konstrukci regulárních výrazů
+     */
+    private TokenParsing tokenParsing;
+
+    /**
+     * Vytvoří objekt pro zpracovávání a vyhodnocování matematických výrazů.
+     *
+     * @param tokenParsing objekt pro konstrukci regulárních výrazů
+     */
+    public Evaluator(TokenParsing tokenParsing) {
+        this.tokenParsing = tokenParsing;
+    }
 
     /**
      * Zpracuje matematický výraz předaný jako řetězec do podoby vhodné k jeho následnému vyhodnocení a v této podobě
@@ -83,7 +97,7 @@ public class Evaluator {
         str = str.toLowerCase();
 
         // přeznačení podle předdefinovaných přepisovacích pravidel
-        for (Map.Entry<String, String> t : ExpressionParsing.TRANSCRIPTIONS.entrySet()) {
+        for (Map.Entry<String, String> t : tokenParsing.getTranscriptionsEntrySet()) {
             str = str.replaceAll(t.getKey(), t.getValue());
         }
 
@@ -109,27 +123,27 @@ public class Evaluator {
         // otestuje výskyt jednotlivých typů tokenů a vybere ten, který se nachází na počátku aktuálního podřetězce
         while (i < str.length()) {
             // test výskytu funkce
-            if ((matcher = ExpressionParsing.FUNCTION_REGEX.matcher(str.substring(i))).find()) {
+            if ((matcher = tokenParsing.getFunctionMatcher(str.substring(i))).find()) {
                 infix.add(new Function(matcher.group()));
             }
             // test výskytu operátoru
-            else if ((matcher = ExpressionParsing.OPERATOR_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = tokenParsing.getOperatorMatcher(str.substring(i))).find()) {
                 infix.add(new Operator(matcher.group()));
             }
             // test výskytu proměnné
-            else if ((matcher = ExpressionParsing.VARIABLE_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = tokenParsing.getVariableMatcher(str.substring(i))).find()) {
                 infix.add(new Variable(matcher.group()));
             }
             // test výskytu čísla
-            else if ((matcher = ExpressionParsing.NUMBER_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = tokenParsing.getNumberMatcher(str.substring(i))).find()) {
                 infix.add(new Number(matcher.group()));
             }
             // test výskytu konstanty
-            else if ((matcher = ExpressionParsing.CONSTANT_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = tokenParsing.getConstantMatcher(str.substring(i))).find()) {
                 infix.add(new Number(matcher.group()));
             }
             // test výskytu závorky
-            else if ((matcher = ExpressionParsing.OTHER_REGEX.matcher(str.substring(i))).find()) {
+            else if ((matcher = tokenParsing.getOtherMatcher(str.substring(i))).find()) {
                 infix.add(new Token(matcher.group()));
             }
             // nenalezen platný token

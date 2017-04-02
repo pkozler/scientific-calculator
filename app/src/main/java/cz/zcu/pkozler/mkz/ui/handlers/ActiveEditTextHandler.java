@@ -2,7 +2,7 @@ package cz.zcu.pkozler.mkz.ui.handlers;
 
 import android.widget.EditText;
 
-import cz.zcu.pkozler.mkz.core.tokens.TokenConfig;
+import cz.zcu.pkozler.mkz.core.helpers.ExpressionConfig;
 import cz.zcu.pkozler.mkz.core.tokens.types.OtherTokenType;
 import cz.zcu.pkozler.mkz.core.tokens.types.VariableType;
 
@@ -68,7 +68,7 @@ public class ActiveEditTextHandler {
      */
     public void addDigit(Character digit) {
         if (digit == null) {
-            addSubString(TokenConfig.DEF_DECIMAL_SEPARATOR);
+            addSubString(ExpressionConfig.DEF_DECIMAL_SEPARATOR);
             
             return;
         }
