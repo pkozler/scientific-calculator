@@ -3,6 +3,7 @@ package cz.zcu.pkozler.mkz.ui;
 import android.app.Application;
 
 import cz.zcu.pkozler.mkz.core.Evaluator;
+import cz.zcu.pkozler.mkz.core.tokens.TokenParsing;
 import cz.zcu.pkozler.mkz.ui.handlers.ActiveEditTextHandler;
 import cz.zcu.pkozler.mkz.ui.handlers.ButtonGridLayoutHandler;
 import cz.zcu.pkozler.mkz.ui.buttons.InputButtonTypeInitializer;
@@ -38,7 +39,8 @@ public class CalculatorContext extends Application {
      */
     public CalculatorContext() {
         // inicializace jednotlivých komponent
-        evaluator = new Evaluator();
+        TokenParsing tokenParsing = new TokenParsing();
+        evaluator = new Evaluator(tokenParsing);
         buttonGridLayoutHandler = new ButtonGridLayoutHandler(
                 InputMode.DIGIT_OPERATOR_MODE, FunctionInputMode.FUNCTION_MODE_1, AngleMode.RAD_MODE, false);
         activeEditTextHandler = new ActiveEditTextHandler();

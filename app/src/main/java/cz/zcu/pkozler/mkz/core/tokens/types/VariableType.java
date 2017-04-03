@@ -22,13 +22,16 @@ public enum VariableType implements ITokenType {
         KEYWORD = keyword;
     }
 
-    @Override
     public boolean stringEquals(String str) {
         return KEYWORD.equals(str);
     }
 
-    @Override
     public String toRegexString() {
+        return KEYWORD;
+    }
+
+    @Override
+    public String toString() {
         return KEYWORD;
     }
 

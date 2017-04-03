@@ -141,7 +141,7 @@ public class BisectionEquationSolver extends AEquationSolver {
         }
 
         // bylo dosaženo povolené odchylky - bude vypočítán odhad řešení
-        equationSolutionContainer.addSolution((a + b) / 2);
+        equationSolutionContainer.addSolution((af + b) / 2);
     }
 
 }
