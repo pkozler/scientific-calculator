@@ -1,5 +1,4 @@
-# scientific-calculator
-Vědecká kalkulačka
+# Vědecká kalkulačka
 
 Java kalkulačka pro Android poskytující matematické funkce pro vědecké výpočty s možností zobrazování grafu a řešení rovnic.
 
